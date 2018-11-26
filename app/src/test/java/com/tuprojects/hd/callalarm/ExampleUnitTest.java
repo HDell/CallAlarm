@@ -1,4 +1,4 @@
-package com.tuprojects.hd.myapplication;
+package com.tuprojects.hd.callalarm;
 
 import org.junit.Test;
 

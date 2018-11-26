@@ -1,4 +1,4 @@
-package com.tuprojects.hd.myapplication;
+package com.tuprojects.hd.callalarm;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

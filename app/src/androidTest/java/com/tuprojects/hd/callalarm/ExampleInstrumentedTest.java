@@ -1,4 +1,4 @@
-package com.tuprojects.hd.myapplication;
+package com.tuprojects.hd.callalarm;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.tuprojects.hd.myapplication", appContext.getPackageName());
+        assertEquals("com.tuprojects.hd.callalarm", appContext.getPackageName());
     }
 }
