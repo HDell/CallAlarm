@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Call Alarm</string>
+    <string name="title_contacts">Contacts</string>
+    <string name="title_call_list">Call List</string>
+    <string name="title_history">History</string>
+</resources>
