@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tuprojects.hd.callalarm">
 
-    <uses-permission android:name="android.permission.READ_CONTACTS" /> <!--Requests permission to read user contacts-->
+    <!--Requests permission to read user contacts-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
