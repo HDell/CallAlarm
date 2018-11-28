@@ -1,5 +1,6 @@
 package com.tuprojects.hd.callalarm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -24,9 +25,13 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_call_list:
                     mTextMessage.setText(R.string.title_call_list);
+                    //Intent callListIntent = new Intent(MainActivity.this, CallListActivity.class);
+                    //startActivity(callListIntent);
                     return true;
                 case R.id.navigation_history:
                     mTextMessage.setText(R.string.title_history);
+                    //Intent historyIntent = new Intent(MainActivity.this, HistoryActivity.class);
+                    //startActivity(historyIntent);
                     return true;
             }
             return false;
