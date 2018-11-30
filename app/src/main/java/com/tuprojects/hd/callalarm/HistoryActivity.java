@@ -1,13 +1,14 @@
 package com.tuprojects.hd.callalarm;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends Fragment {
 
     //variables
     private TextView mTextMessage;
@@ -46,6 +47,16 @@ public class HistoryActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message); //creates "Contacts" text view (sync w/ layout)
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation); //syncs nav object w/ layout
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    protected void onCreateView() {
+
+    }
+
+    @Override
+    protected void onPause() {
+
     }
 
 }
