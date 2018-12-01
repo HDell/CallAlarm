@@ -5,10 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class HistoryActivity extends Fragment {
+public class HistoryActivity extends AppCompatActivity {
 
     //variables
     private TextView mTextMessage;
@@ -49,7 +50,7 @@ public class HistoryActivity extends Fragment {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    @Override
+    /*@Override
     protected void onCreateView() {
 
     }
@@ -57,6 +58,6 @@ public class HistoryActivity extends Fragment {
     @Override
     protected void onPause() {
 
-    }
+    }*/
 
 }

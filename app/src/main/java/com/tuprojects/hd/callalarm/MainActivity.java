@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     //variables
     private TextView mTextMessage;
+    private Intent testIntent; //temporary
 
         //variable as anonymous class
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -22,14 +23,32 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_contacts:
                     mTextMessage.setText(R.string.title_contacts);
+
+                    //Temporary
+                    testIntent = new Intent(MainActivity.this, TestActivity.class);
+                    startActivity(testIntent);
+                    //^^^Training Only
+
                     return true;
                 case R.id.navigation_call_list:
                     mTextMessage.setText(R.string.title_call_list);
+
+                    //Temporary
+                    testIntent = new Intent(MainActivity.this, TestActivity.class);
+                    startActivity(testIntent);
+                    //^^^Training Only
+
                     //Intent callListIntent = new Intent(MainActivity.this, CallListActivity.class);
                     //startActivity(callListIntent);
                     return true;
                 case R.id.navigation_history:
                     mTextMessage.setText(R.string.title_history);
+
+                    //Temporary
+                    Intent testIntent = new Intent(MainActivity.this, TestActivity.class);
+                    startActivity(testIntent);
+                    //^^^Training Only
+
                     //Intent historyIntent = new Intent(MainActivity.this, HistoryActivity.class);
                     //startActivity(historyIntent);
                     return true;
