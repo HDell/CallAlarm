@@ -4,8 +4,4 @@
     <string name="title_call_list">Call List</string>
     <string name="title_history">History</string>
 
-    <!--Temporary Strings-->
-    <string name="edit_message">Enter a message</string>
-    <string name="button_send">Send</string>
-
 </resources>
