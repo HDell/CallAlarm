@@ -26,7 +26,8 @@
 
         <!-- Temporary Activities -->
         <activity android:name=".TestActivity" />
-        <activity android:name=".DisplayMessageActivity" />
+        <activity android:name=".DisplayMessageActivity"
+            android:parentActivityName=".TestActivity"/>
     </application>
 
 </manifest>
