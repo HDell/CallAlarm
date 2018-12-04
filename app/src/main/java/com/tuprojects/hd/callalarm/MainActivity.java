@@ -1,15 +1,14 @@
 package com.tuprojects.hd.callalarm;
 
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+/*
+VIEW
+ */
 
 public class MainActivity extends AppCompatActivity {
 
