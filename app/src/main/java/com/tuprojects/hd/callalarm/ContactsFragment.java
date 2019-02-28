@@ -1,15 +1,20 @@
 package com.tuprojects.hd.callalarm;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ContactsFragment extends Fragment {
     @Override
@@ -30,43 +35,8 @@ public class ContactsFragment extends Fragment {
         //layoutManager = new LinearLayoutManager(this); //this assumes that we're creating directly from Activity
         //recyclerView.setLayoutManager(layoutManager || RecyclerView.LayoutManager);
 
-        /*
-        https://stackoverflow.com/questions/26621060/display-a-recyclerview-in-fragment
-        // this is data for recycler view
-        ItemData itemsData[] = {
-            new ItemData("Indigo", R.drawable.circle),
-            new ItemData("Red", R.drawable.color_ic_launcher),
-            new ItemData("Blue", R.drawable.indigo),
-            new ItemData("Green", R.drawable.circle),
-            new ItemData("Amber", R.drawable.color_ic_launcher),
-            new ItemData("Deep Orange", R.drawable.indigo)
-         };
-         */
-        //My test data
-        ArrayList<String> testData = new ArrayList<>();
-        testData.add("Abigail");
-        testData.add("Adam");
-        testData.add("Ashley");
-        testData.add("Brad");
-        testData.add("Brian");
-        testData.add("Brittney");
-        testData.add("Candice");
-        testData.add("Charles");
-        testData.add("Chris");
-        testData.add("Dad");
-        testData.add("Evan");
-        testData.add("Frank");
-        testData.add("Gabby");
-        testData.add("Home");
-        testData.add("Issac");
-        testData.add("Jason");
-        testData.add("Kendel");
-        testData.add("Lucas");
-        testData.add("Mom");
-        testData.add("Nelson");
-
         // 3. create an adapter
-        ContactsAdapter adapter = new ContactsAdapter(testData);
+        ContactsAdapter adapter = new ContactsAdapter(getAndroidContacts());
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);
@@ -76,4 +46,58 @@ public class ContactsFragment extends Fragment {
 
         return rootView;
     }
+
+    //Should this be in another file? (Should the coupling be loosened?)
+    public class AndroidContact {
+        private String contactName = "";
+        private String contactPhoneNum = "";
+        private int contactID = 0;
+
+        public AndroidContact(String contactName) {
+            this.contactName = contactName;
+        }
+
+        public String getName() {
+            return contactName;
+        }
+    }
+
+    public List<AndroidContact> getAndroidContacts() {
+        List<AndroidContact> androidContactList = new ArrayList<AndroidContact>();
+
+        //Initialize Cursor w/ connection to Contacts (Content) Provider
+        Cursor cursorAndroidContacts = null; //learn CursorLoader; confused on difference between Cursor & CursorLoader
+        ContentResolver contentResolver = getContext().getContentResolver();
+        try {
+
+            //content://contacts_contract/contacts -> ContactsContracts=authority, Contacts=table path, CONTENT_URI contains URI to contacts table
+            //Cursor will now hold the data from the Contacts table
+            cursorAndroidContacts = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC");
+
+        } catch (Exception ex) {
+            Log.e("Error on contact ", ex.getMessage());
+        }
+
+        if (cursorAndroidContacts.getCount()>0) {
+
+            while (cursorAndroidContacts.moveToNext()) { //looks at each row of cursor
+
+                //Note: this is how you use the cursor to read data from a content provider
+                    //cursor.getString(index) <- (w/ respect to the current line [see loop])
+                AndroidContact androidContact = new AndroidContact(cursorAndroidContacts.getString(cursorAndroidContacts.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+                //String contactID = cursorAndroidContacts.getString(cursorAndroidContacts.getColumnIndex(ContactsContract.Contacts._ID));
+
+                //Handle phone number here (to-do LATER)
+
+                //Build AndroidContacts ArrayList
+                androidContactList.add(androidContact);
+            }
+
+        }
+
+        cursorAndroidContacts.close();
+        return androidContactList;
+
+    }
+
 }

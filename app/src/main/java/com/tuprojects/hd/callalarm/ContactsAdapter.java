@@ -1,5 +1,6 @@
 package com.tuprojects.hd.callalarm;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +13,19 @@ import java.util.List;
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
 
     //State
-    private List<String> dataset;
+    private List<ContactsFragment.AndroidContact> dataset;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //State
         public TextView textView;
+        public ConstraintLayout parentLayout;
 
         //Constructor
         public ViewHolder(View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.contacts_data_holder);
+            this.parentLayout = itemView.findViewById(R.id.contacts_layout);
         }
 
         /*
@@ -35,7 +38,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ContactsAdapter(List<String> dataset) {
+    public ContactsAdapter(List<ContactsFragment.AndroidContact> dataset) {
         this.dataset = dataset;
     }
 
@@ -55,7 +58,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textView.setText(dataset.get(position));
+        holder.textView.setText(dataset.get(position).getName());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

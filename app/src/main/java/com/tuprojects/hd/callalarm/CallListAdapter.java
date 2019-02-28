@@ -1,5 +1,6 @@
 package com.tuprojects.hd.callalarm;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
         public TextView nameTextView;
         public TextView frequencyTextView;
         public TextView historyTextView;
+        public ConstraintLayout parentLayout;
 
         //Constructor
         public ViewHolder(View itemView) {
@@ -26,6 +28,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
             this.nameTextView = itemView.findViewById(R.id.call_list_name_holder);
             this.frequencyTextView = itemView.findViewById(R.id.call_frequency_data_holder);
             this.historyTextView = itemView.findViewById(R.id.call_history_data_holder);
+            this.parentLayout = itemView.findViewById(R.id.call_list_layout);
         }
 
         /*

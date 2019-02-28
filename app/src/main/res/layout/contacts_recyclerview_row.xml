@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contacts_layout"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -8,18 +9,22 @@
     android:padding="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/contacts_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/contacts_image"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
         android:id="@+id/contacts_data_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dummy Text"
-        android:layout_marginLeft="10dp"
+        android:text="@string/dummy_text"
+        android:layout_marginStart="10dp"
         app:layout_constraintLeft_toRightOf="@id/contacts_image"
         app:layout_constraintTop_toTopOf="@id/contacts_image"
         app:layout_constraintBottom_toBottomOf="@id/contacts_image"
