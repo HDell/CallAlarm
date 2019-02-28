@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/contacts_layout"
+    android:id="@+id/history_layout"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,9 +13,8 @@
         android:id="@+id/contacts_image"
         android:src="@mipmap/ic_launcher"/>
 
-
     <TextView
-        android:id="@+id/contacts_data_holder"
+        android:id="@+id/history_name_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dummy Text"
@@ -24,6 +23,16 @@
         app:layout_constraintTop_toTopOf="@id/contacts_image"
         app:layout_constraintBottom_toBottomOf="@id/contacts_image"
         android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/history_details_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Incoming (missed), Yesterday, 4:32 PM"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toRightOf="@id/contacts_image"
+        app:layout_constraintTop_toBottomOf="@id/history_name_holder"
+        android:textSize="10sp"/>
 
     <ImageButton
         android:layout_width="40dp"
