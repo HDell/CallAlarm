@@ -2,6 +2,7 @@ package com.tuprojects.hd.callalarm;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CallListFragment extends Fragment {
     @Override
@@ -23,43 +25,41 @@ public class CallListFragment extends Fragment {
 
 
         // 2. set layoutManger
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         // use a linear layout manager
         //layoutManager = new LinearLayoutManager(this); //this assumes that we're creating directly from Activity
         //recyclerView.setLayoutManager(layoutManager || RecyclerView.LayoutManager);
 
         //My test data
-        ArrayList<String> testData = new ArrayList<>();
-        testData.add("aa");
-        testData.add("bb");
-        testData.add("cc");
-        testData.add("dd");
-        testData.add("ee");
-        testData.add("ff");
-        testData.add("gg");
-        testData.add("hh");
-        testData.add("ii");
-        testData.add("jj");
-        testData.add("kk");
-        testData.add("ll");
-        testData.add("mm");
-        testData.add("nn");
-        testData.add("oo");
-        testData.add("pp");
-        testData.add("qq");
-        testData.add("rr");
-        testData.add("ss");
-        testData.add("tt");
-        testData.add("uu");
-        testData.add("vv");
+        ArrayList<String> testDataNames = new ArrayList<>();
+        testDataNames.add("Ashley");
+        testDataNames.add("Dad");
+        testDataNames.add("Mom");
 
+        List<String> testDataFrequency = new ArrayList<>();
+        testDataFrequency.add("Daily");
+        testDataFrequency.add("Once every 3 weeks");
+        testDataFrequency.add("Weekly");
 
+        List<String> testDataHistory = new ArrayList<>();
+        testDataHistory.add("Spoke for 19 min. yesterday");
+        testDataHistory.add("Spoke 6 days ago");
+        testDataHistory.add("Missed 1 call yesterday");
+
+        List<List<String>> testData = new ArrayList<>();
+        testData.add(testDataNames);
+        testData.add(testDataFrequency);
+        testData.add(testDataHistory);
 
         // 3. create an adapter
         CallListAdapter adapter = new CallListAdapter(testData);
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         return rootView;
     }

@@ -11,17 +11,21 @@ import java.util.List;
 public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHolder> {
 
     //State
-    private List<String> dataset;
+    private List<List<String>> dataset;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //State
-        public TextView textView;
+        public TextView nameTextView;
+        public TextView frequencyTextView;
+        public TextView historyTextView;
 
         //Constructor
         public ViewHolder(View itemView) {
             super(itemView);
-            this.textView = itemView.findViewById(R.id.call_list_data_holder);
+            this.nameTextView = itemView.findViewById(R.id.call_list_name_holder);
+            this.frequencyTextView = itemView.findViewById(R.id.call_frequency_data_holder);
+            this.historyTextView = itemView.findViewById(R.id.call_history_data_holder);
         }
 
         /*
@@ -34,7 +38,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CallListAdapter(List<String> dataset) {
+    public CallListAdapter(List<List<String>> dataset) {
         this.dataset = dataset;
     }
 
@@ -54,7 +58,9 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
     public void onBindViewHolder(CallListAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textView.setText(dataset.get(position));
+        holder.nameTextView.setText(dataset.get(0).get(position));
+        holder.frequencyTextView.setText(dataset.get(1).get(position));
+        holder.historyTextView.setText(dataset.get(2).get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)

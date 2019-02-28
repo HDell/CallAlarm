@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Views (Widgets)
-    TextView textView;
     BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {//listens for clicks
 
         @Override
@@ -60,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_contacts: // (item.getItemId() == R.id.navigation_contacts)
-
-                    textView.setText("Contacts");
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
@@ -71,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
                     //Unique Fragment Text
                 case R.id.navigation_call_list:
 
-                    textView.setText("Call List");
-
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
                     fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
@@ -80,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                     //Unique Fragment Text
                 case R.id.navigation_history:
-
-                    textView.setText("History");
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
@@ -103,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initializations
             //Views
-        textView = (TextView) findViewById(R.id.textView); //is casting to TextView really redundant?
+            //is casting to BottomNavigationView really redundant?
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation); //syncs nav object w/ layout
 
         //View Behavior
@@ -112,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
         //Start Fragment on Contacts
         fragmentTransaction.add(R.id.fragment_container, contactsFragment).commit();
 
-        /*/ Check that the activity is using the layout version with
+        /* (Not sure about this method)
+        // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
         if (findViewById(R.id.fragment_container) != null) {
 

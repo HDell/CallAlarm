@@ -2,6 +2,7 @@ package com.tuprojects.hd.callalarm;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,7 +24,8 @@ public class ContactsFragment extends Fragment {
 
 
         // 2. set layoutManger
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         // use a linear layout manager
         //layoutManager = new LinearLayoutManager(this); //this assumes that we're creating directly from Activity
         //recyclerView.setLayoutManager(layoutManager || RecyclerView.LayoutManager);
@@ -42,36 +44,35 @@ public class ContactsFragment extends Fragment {
          */
         //My test data
         ArrayList<String> testData = new ArrayList<>();
-        testData.add("aaa");
-        testData.add("bbb");
-        testData.add("ccc");
-        testData.add("ddd");
-        testData.add("eee");
-        testData.add("fff");
-        testData.add("ggg");
-        testData.add("hhh");
-        testData.add("iii");
-        testData.add("jjj");
-        testData.add("kkk");
-        testData.add("lll");
-        testData.add("mmm");
-        testData.add("nnn");
-        testData.add("ooo");
-        testData.add("ppp");
-        testData.add("qqq");
-        testData.add("rrr");
-        testData.add("sss");
-        testData.add("ttt");
-        testData.add("uuu");
-        testData.add("vvv");
-
-
+        testData.add("Abigail");
+        testData.add("Adam");
+        testData.add("Ashley");
+        testData.add("Brad");
+        testData.add("Brian");
+        testData.add("Brittney");
+        testData.add("Candice");
+        testData.add("Charles");
+        testData.add("Chris");
+        testData.add("Dad");
+        testData.add("Evan");
+        testData.add("Frank");
+        testData.add("Gabby");
+        testData.add("Home");
+        testData.add("Issac");
+        testData.add("Jason");
+        testData.add("Kendel");
+        testData.add("Lucas");
+        testData.add("Mom");
+        testData.add("Nelson");
 
         // 3. create an adapter
         ContactsAdapter adapter = new ContactsAdapter(testData);
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         return rootView;
     }
