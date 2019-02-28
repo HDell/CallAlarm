@@ -8,8 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-//Interface between the (Contacts) data source and the AdapterView (ListView->RecyclerView) layout
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHolder> {
 
     //State
     private List<String> dataset;
@@ -22,7 +21,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         //Constructor
         public ViewHolder(View itemView) {
             super(itemView);
-            this.textView = itemView.findViewById(R.id.contacts_data_holder);
+            this.textView = itemView.findViewById(R.id.call_list_data_holder);
         }
 
         /*
@@ -35,7 +34,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ContactsAdapter(List<String> dataset) {
+    public CallListAdapter(List<String> dataset) {
         this.dataset = dataset;
     }
 
@@ -43,16 +42,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //ViewHolder Behavior // Create new views (invoked by the layout manager) //NECESSARY
     @Override
-    public ContactsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CallListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_recyclerview_row, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.call_list_recyclerview_row, parent, false);
+        CallListAdapter.ViewHolder viewHolder = new CallListAdapter.ViewHolder(view);
         return viewHolder;
     }
 
     // Replace the contents of a view (invoked by the layout manager) //NECESSARY
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(CallListAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.textView.setText(dataset.get(position));
@@ -63,5 +62,4 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     public int getItemCount() {
         return dataset.size();
     }
-
 }

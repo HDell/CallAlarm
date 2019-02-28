@@ -1,7 +1,6 @@
 package com.tuprojects.hd.callalarm;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +45,27 @@ public class ContactsFragment extends Fragment {
         testData.add("aaa");
         testData.add("bbb");
         testData.add("ccc");
+        testData.add("ddd");
+        testData.add("eee");
+        testData.add("fff");
+        testData.add("ggg");
+        testData.add("hhh");
+        testData.add("iii");
+        testData.add("jjj");
+        testData.add("kkk");
+        testData.add("lll");
+        testData.add("mmm");
+        testData.add("nnn");
+        testData.add("ooo");
+        testData.add("ppp");
+        testData.add("qqq");
+        testData.add("rrr");
+        testData.add("sss");
+        testData.add("ttt");
+        testData.add("uuu");
+        testData.add("vvv");
+
+
 
         // 3. create an adapter
         ContactsAdapter adapter = new ContactsAdapter(testData);

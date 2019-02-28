@@ -43,13 +43,13 @@ public class MainActivity extends AppCompatActivity {
     //STATE
 
         //Fragments
-        //ContactsFragment contactsFragment = new ContactsFragment();
-    //CallListFragment callListFragment = new CallListFragment();
-    //HistoryFragment historyFragment = new HistoryFragment();
+        ContactsFragment contactsFragment = new ContactsFragment();
+        CallListFragment callListFragment = new CallListFragment();
+        HistoryFragment historyFragment = new HistoryFragment();
 
             //Manager Set Up
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Views (Widgets)
     TextView textView;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {//anonymous method called when a button (item) is pressed
+            fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_contacts: // (item.getItemId() == R.id.navigation_contacts)
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    //fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
+                    fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
 
                     return true;
                     //Unique Fragment Text
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    //fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
+                    fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
 
                     return true;
                     //Unique Fragment Text
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    //fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
+                    fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
 
                     return true;
                     //Unique Fragment Text
@@ -99,16 +100,6 @@ public class MainActivity extends AppCompatActivity {
         //Default Methods
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-
-        ContactsFragment contactsFragment = new ContactsFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-
-
 
         //Initializations
             //Views
