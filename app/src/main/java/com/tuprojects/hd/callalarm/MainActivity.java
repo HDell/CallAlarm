@@ -43,13 +43,13 @@ public class MainActivity extends AppCompatActivity {
     //STATE
 
         //Fragments
-    ContactsFragment contactsFragment = new ContactsFragment();
-    CallListFragment callListFragment = new CallListFragment();
-    HistoryFragment historyFragment = new HistoryFragment();
+        //ContactsFragment contactsFragment = new ContactsFragment();
+    //CallListFragment callListFragment = new CallListFragment();
+    //HistoryFragment historyFragment = new HistoryFragment();
 
             //Manager Set Up
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Views (Widgets)
     TextView textView;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
+                    //fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
 
                     return true;
                     //Unique Fragment Text
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
+                    //fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
 
                     return true;
                     //Unique Fragment Text
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
+                    //fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
 
                     return true;
                     //Unique Fragment Text
@@ -100,6 +100,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
+        ContactsFragment contactsFragment = new ContactsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+
+
         //Initializations
             //Views
         textView = (TextView) findViewById(R.id.textView); //is casting to TextView really redundant?
@@ -108,7 +118,10 @@ public class MainActivity extends AppCompatActivity {
         //View Behavior
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
-        // Check that the activity is using the layout version with
+        //Start Fragment on Contacts
+        fragmentTransaction.add(R.id.fragment_container, contactsFragment).commit();
+
+        /*/ Check that the activity is using the layout version with
         // the fragment_container FrameLayout
         if (findViewById(R.id.fragment_container) != null) {
 
@@ -119,9 +132,8 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            //Start Fragment on Contacts
-            fragmentTransaction.add(R.id.fragment_container, contactsFragment).commit();
-        }
+
+        }*/
 
     }
 
