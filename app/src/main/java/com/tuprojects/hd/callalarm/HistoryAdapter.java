@@ -13,7 +13,7 @@ import java.util.List;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     
     //State
-    private List<List<String>> dataset;
+    private List<HistoryFragment.CallLogData> dataset;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,7 +34,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public HistoryAdapter(List<List<String>> dataset) {
+    public HistoryAdapter(List<HistoryFragment.CallLogData> dataset) {
         this.dataset = dataset;
     }
 
@@ -54,17 +54,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        List<String> names = dataset.get(0);
-        holder.nameTextView.setText(names.get(position));
+        //String nameNum = dataset.get(position).getName()+" "+dataset.get(position).getNumber();
+        holder.nameTextView.setText(dataset.get(position).getName());
 
-        List<String> details = dataset.get(1);
-        holder.detailsTextView.setText(details.get(position));
+        String details = dataset.get(position).getType()+", "+dataset.get(position).getDate();
+        holder.detailsTextView.setText(details);
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return dataset.get(0).size();
+        return dataset.size();
     }
 }

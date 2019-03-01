@@ -4,6 +4,7 @@
 
     <!-- Requests permission to read user contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
         android:allowBackup="true"

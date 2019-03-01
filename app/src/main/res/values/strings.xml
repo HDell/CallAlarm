@@ -4,4 +4,10 @@
     <string name="title_call_list">Call List</string>
     <string name="title_history">History</string>
 
+    <string name="dummy_text">Dummy Text</string>
+
+    <string name="call_list_frequency">Call Frequency:</string>
+    <string name="call_list_history">Call History:</string>
+
+
 </resources>

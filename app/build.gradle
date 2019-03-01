@@ -33,4 +33,7 @@ dependencies {
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    //Guava
+    api 'com.google.guava:guava:27.0.1-android'
+
 }
