@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_call_list:
 
                     navScreen = 0;
-                    restart = getIntent().getExtras().getBoolean("restart");
+                    restart = false;
 
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
                         if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_CALL_LOG)) {
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_history:
 
                     navScreen = 1;
-                    restart = getIntent().getExtras().getBoolean("restart");
+                    restart = false;
 
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
                         if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_CALL_LOG)) {
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case 1: {
+            case 1: { //curly braces used to visually separate the return statement below
                 //General permission check
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
                         //Restarts Activity if permission has been granted for the first time
                         if(restart) {
                             Intent intent = getIntent();
-                            intent.putExtra("restart", false);
                             finish();
                             startActivity(intent);
                         }

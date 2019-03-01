@@ -62,7 +62,7 @@ public class ContactsFragment extends Fragment {
         }
     }
 
-    public List<AndroidContact> getAndroidContacts() {
+    private List<AndroidContact> getAndroidContacts() {
         List<AndroidContact> androidContactList = new ArrayList<AndroidContact>();
 
         //Initialize Cursor w/ connection to Contacts (Content) Provider
