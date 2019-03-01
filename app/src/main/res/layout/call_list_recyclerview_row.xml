@@ -26,7 +26,7 @@
         android:layout_marginStart="10dp"
         app:layout_constraintLeft_toRightOf="@id/contacts_image"
         app:layout_constraintTop_toTopOf="@id/contacts_image"
-        app:layout_constraintBottom_toBottomOf="@id/contacts_image"
+        app:layout_constraintBottom_toTopOf="@id/call_frequency_holder"
         android:textSize="20sp"/>
 
     <TextView
@@ -35,9 +35,9 @@
         android:layout_height="wrap_content"
         android:text="@string/call_list_frequency"
         android:layout_marginStart="10dp"
-        app:layout_constraintLeft_toRightOf="@id/call_list_name_holder"
-        app:layout_constraintTop_toTopOf="@id/call_list_name_holder"
-        app:layout_constraintBottom_toTopOf="@id/call_history_holder"
+        app:layout_constraintLeft_toRightOf="@id/contacts_image"
+        app:layout_constraintTop_toBottomOf="@id/call_list_name_holder"
+        app:layout_constraintBottom_toBottomOf="@id/call_history_holder"
         android:textSize="12sp"/>
 
     <TextView
@@ -45,10 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dummy_text"
-        android:layout_marginStart="1dp"
+        android:layout_marginStart="2dp"
         app:layout_constraintLeft_toRightOf="@id/call_frequency_holder"
-        app:layout_constraintTop_toTopOf="@id/call_list_name_holder"
-        app:layout_constraintBottom_toTopOf="@id/call_history_holder"
+        app:layout_constraintTop_toTopOf="@id/call_frequency_holder"
+        app:layout_constraintBottom_toBottomOf="@id/call_frequency_holder"
         android:textSize="12sp"/>
 
     <TextView
@@ -57,9 +57,9 @@
         android:layout_height="wrap_content"
         android:text="@string/call_list_history"
         android:layout_marginStart="10dp"
-        app:layout_constraintLeft_toRightOf="@id/call_list_name_holder"
+        app:layout_constraintLeft_toRightOf="@id/contacts_image"
         app:layout_constraintTop_toBottomOf="@id/call_frequency_holder"
-        app:layout_constraintBottom_toBottomOf="@id/call_list_name_holder"
+        app:layout_constraintBottom_toBottomOf="@id/contacts_image"
         android:textSize="12sp"/>
 
     <TextView
@@ -67,11 +67,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dummy_text"
-        android:layout_marginStart="1dp"
+        android:layout_marginStart="2dp"
         android:textColor="#008000"
         app:layout_constraintLeft_toRightOf="@id/call_history_holder"
-        app:layout_constraintTop_toBottomOf="@id/call_frequency_holder"
-        app:layout_constraintBottom_toBottomOf="@id/call_list_name_holder"
+        app:layout_constraintTop_toTopOf="@id/call_history_holder"
+        app:layout_constraintBottom_toBottomOf="@id/call_history_holder"
         android:textSize="12sp"/>
 
     <ImageButton

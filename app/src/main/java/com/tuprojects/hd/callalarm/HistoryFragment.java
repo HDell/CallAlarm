@@ -99,7 +99,11 @@ public class HistoryFragment extends Fragment {
                 this.name = name;
             }
             this.number = number;
-            this.type = type;
+            if (type.equals("Outgoing") && Integer.parseInt(duration) <= 5){ //proxy for missed outgoing calls until better method is found
+                this.type = type+" (Missed)";
+            } else {
+                this.type = type;
+            }
             this.duration = duration;
             this.date = date;
         }

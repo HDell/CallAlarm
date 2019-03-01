@@ -57,7 +57,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         //String nameNum = dataset.get(position).getName()+" "+dataset.get(position).getNumber();
         holder.nameTextView.setText(dataset.get(position).getName());
 
-        String details = dataset.get(position).getType()+", "+dataset.get(position).getDate()+", "+dataset.get(position).getDuration();
+        String details = dataset.get(position).getType()+", "+dataset.get(position).getDate();
         holder.detailsTextView.setText(details);
 
     }
