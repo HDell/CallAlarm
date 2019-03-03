@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.tuprojects.hd.callalarm.AndroidContact;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
 
     //State
-    private List<ContactsFragment.AndroidContact> dataset;
+    private List<AndroidContact> dataset;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -38,7 +39,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ContactsAdapter(List<ContactsFragment.AndroidContact> dataset) {
+    public ContactsAdapter(List<AndroidContact> dataset) {
         this.dataset = dataset;
     }
 
@@ -58,7 +59,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textView.setText(dataset.get(position).getName());
+        String tempDetails = dataset.get(position).getStrippedPhoneNum(0) + "||" + dataset.get(position).getName();
+        holder.textView.setText(tempDetails); //dataset.get(position).getName()
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -23,7 +23,7 @@ MODEL:
     ]
  */
 
-public class CallListDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "call_list.db"; //get the proper nomenclature if there is an sql naming convention
     private static final String TABLE_NAME = "call_list_table";
@@ -35,7 +35,7 @@ public class CallListDatabaseHelper extends SQLiteOpenHelper {
     private static final String COL4 = "LAST CALL DURATION";
     private static final String COL5 = "LAST CALL DATE"; //how should this be broken up?
 
-    public CallListDatabaseHelper(@Nullable Context context) {
+    public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);
     }
 

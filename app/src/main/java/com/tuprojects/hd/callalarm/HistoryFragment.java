@@ -88,24 +88,56 @@ public class HistoryFragment extends Fragment {
     public class CallLogData {
         private String name = "";
         private String number = "";
+        private String strippedNumber = "";
         private String type = "";
-        private String duration = "";
         private String date = "";
+        private String duration = "";
 
-        public CallLogData(String name, String number, String type, String duration, String date) {
+        private int durationInt;
+        private int seconds = 0;
+        private int minutes = 0;
+        private int hours = 0;
+
+        public CallLogData(String name, String number, String type, String date, String duration) {
+
             if (name == null){
                 this.name = number;
             } else {
                 this.name = name;
             }
+
             this.number = number;
+
+            for (int i = 0; i < number.length(); i++) {
+                String character = "";
+                character += this.number.charAt(i);
+
+                try {
+                    Integer.parseInt(character);
+                    strippedNumber += character;
+                } catch (NumberFormatException e) {
+                    //do nothing
+                }
+
+            }
+
             if (type.equals("Outgoing") && Integer.parseInt(duration) <= 5){ //proxy for missed outgoing calls until better method is found
                 this.type = type+" (Missed)";
             } else {
                 this.type = type;
             }
-            this.duration = duration;
+
             this.date = date;
+
+            this.duration = duration;
+
+            durationInt = Integer.parseInt(duration);
+            seconds = durationInt%60;
+            minutes = durationInt/60;
+            if(minutes>=60) {
+                hours = minutes/60;
+                minutes = minutes%60;
+            }
         }
 
         public String getName() {
@@ -116,12 +148,22 @@ public class HistoryFragment extends Fragment {
             return number;
         }
 
+        public String getStrippedNumber() {
+            return strippedNumber;
+        }
+
         public String getType() {
             return type;
         }
 
-        public String getDuration() {
-            return duration;
+        public String getDuration() { //formatted
+            if (hours>0) {
+                return hours + " hrs., " + minutes + " min., " + seconds + " sec.";
+            } else if (minutes>0) {
+                return minutes + " min., " + seconds + " sec.";
+            } else {
+                return seconds + " sec.";
+            }
         }
 
         public String getDate() {
@@ -147,17 +189,20 @@ public class HistoryFragment extends Fragment {
             int date = cursorCallDetails.getColumnIndex(CallLog.Calls.DATE);
             while (cursorCallDetails.moveToNext()) {
 
+                //Initializations
                 String name = cursorCallDetails.getString(cursorCallDetails.getColumnIndex(CallLog.Calls.CACHED_NAME));
 
                 String number = cursorCallDetails.getString(numberIndex);
                 String callType = cursorCallDetails.getString(callTypeIndex);
+                String callDate = cursorCallDetails.getString(date);
                 String callDuration = cursorCallDetails.getString(callDurationIndex);
 
-                String callDate = cursorCallDetails.getString(date);
+                //Date Formatting
                 Date callDayTime = new Date(Long.valueOf(callDate));
                 SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yy hh:mm a");
                 String dateString = formatter.format(callDayTime);
 
+                //Call Type Formatting
                 String callTypeString = null;
                 int callTypeCode = Integer.parseInt(callType);
                 switch (callTypeCode) {
@@ -178,7 +223,7 @@ public class HistoryFragment extends Fragment {
                         break;
                 }
 
-                CallLogData callLogData = new CallLogData(name, number, callTypeString, callDuration, dateString);
+                CallLogData callLogData = new CallLogData(name, number, callTypeString, dateString, callDuration);
 
                 callDetails.add(callLogData);
             }

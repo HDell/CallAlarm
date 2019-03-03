@@ -16,7 +16,7 @@ import android.view.MenuItem;
  */
 
 //Activity which will contain a Fragment for each individual Contact
-public class ContactFocusActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class ContactFocusActivity extends AppCompatActivity {
         };
 
         //View Behavior
-        navigation.getMenu().setGroupCheckable(0, false, true);
+        navigation.getMenu().setGroupCheckable(0, false, true); //no menu color
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
     }

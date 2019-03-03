@@ -54,7 +54,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        //String nameNum = dataset.get(position).getName()+" "+dataset.get(position).getNumber();
+            //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();
         holder.nameTextView.setText(dataset.get(position).getName());
 
         String details = dataset.get(position).getType()+", "+dataset.get(position).getDate();
