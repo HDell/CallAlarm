@@ -15,7 +15,7 @@ public class AndroidContact {
         this.contactName = contactName;
     }
 
-    //Getters (accessor)
+    //Getters (accessors)
     public String getName() {
         return contactName;
     }
@@ -54,7 +54,7 @@ public class AndroidContact {
         }
     }
 
-    //Setters (mutator)
+    //Setters (mutators)
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }

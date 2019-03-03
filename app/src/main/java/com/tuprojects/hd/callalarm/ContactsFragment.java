@@ -33,7 +33,7 @@ public class ContactsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // 3. create an adapter
-        ContactsAdapter adapter = new ContactsAdapter(getAndroidContacts());
+        ContactsAdapter adapter = new ContactsAdapter(getContext(), getAndroidContacts());
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);

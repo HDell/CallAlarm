@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 /*
     From this screen, users will have the ability to:
@@ -18,11 +19,13 @@ import android.view.MenuItem;
 //Activity which will contain a Fragment for each individual Contact
 public class DetailsActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Default Methods
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_focus);
+        setContentView(R.layout.activity_details);
 
         //Initializations
         //Views
@@ -59,6 +62,19 @@ public class DetailsActivity extends AppCompatActivity {
         //View Behavior
         navigation.getMenu().setGroupCheckable(0, false, true); //no menu color
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+
+        getIncomingIntent();
+
+    }
+
+    private void getIncomingIntent() {
+
+        if (getIntent().hasExtra("name")&&getIntent().hasExtra("number")) {
+            String name = getIntent().getStringExtra("name");
+            String number = getIntent().getStringExtra("number");
+            TextView abc = (TextView) findViewById(R.id.abc);
+            abc.setText(name);
+        }
 
     }
 

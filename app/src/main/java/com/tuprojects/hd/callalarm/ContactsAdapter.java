@@ -1,11 +1,15 @@
 package com.tuprojects.hd.callalarm;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.tuprojects.hd.callalarm.AndroidContact;
 
 import java.util.List;
@@ -15,6 +19,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //State
     private List<AndroidContact> dataset;
+    private Context context;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -39,7 +44,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ContactsAdapter(List<AndroidContact> dataset) {
+    public ContactsAdapter(Context context, List<AndroidContact> dataset) {
+        this.context = context;
         this.dataset = dataset;
     }
 
@@ -59,8 +65,23 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        String tempDetails = dataset.get(position).getStrippedPhoneNum(0) + "||" + dataset.get(position).getName();
-        holder.textView.setText(tempDetails); //dataset.get(position).getName()
+
+        final AndroidContact androidContact = dataset.get(position);
+
+        //String tempDetails = dataset.get(position).getStrippedPhoneNum(0) + "||" + dataset.get(position).getName();
+        holder.textView.setText(dataset.get(position).getName()); //dataset.get(position).getName()
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "JUST TESTING THAT I WORK", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, DetailsActivity.class);
+                intent.putExtra("name", androidContact.getName());
+                intent.putExtra("number", androidContact.getStrippedPhoneNum(0));
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

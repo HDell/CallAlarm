@@ -90,9 +90,11 @@ public class HistoryFragment extends Fragment {
         private String number = "";
         private String strippedNumber = "";
         private String type = "";
-        private String date = "";
-        private String duration = "";
 
+        private String date = "";
+        private String formattedDate = "";
+
+        private String duration = "";
         private int durationInt;
         private int seconds = 0;
         private int minutes = 0;
@@ -128,6 +130,9 @@ public class HistoryFragment extends Fragment {
             }
 
             this.date = date;
+
+            //Date Formatting
+            formattedDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(new Date(Long.valueOf(date)));
 
             this.duration = duration;
 
@@ -167,7 +172,7 @@ public class HistoryFragment extends Fragment {
         }
 
         public String getDate() {
-            return date;
+            return formattedDate;
         }
     }
 
@@ -197,11 +202,6 @@ public class HistoryFragment extends Fragment {
                 String callDate = cursorCallDetails.getString(date);
                 String callDuration = cursorCallDetails.getString(callDurationIndex);
 
-                //Date Formatting
-                Date callDayTime = new Date(Long.valueOf(callDate));
-                SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yy hh:mm a");
-                String dateString = formatter.format(callDayTime);
-
                 //Call Type Formatting
                 String callTypeString = null;
                 int callTypeCode = Integer.parseInt(callType);
@@ -223,7 +223,9 @@ public class HistoryFragment extends Fragment {
                         break;
                 }
 
-                CallLogData callLogData = new CallLogData(name, number, callTypeString, dateString, callDuration);
+                CallLogData callLogData = new CallLogData(name, number, callTypeString, callDate, callDuration);
+
+                //before adding, check the number against the database and only add if the number is present there
 
                 callDetails.add(callLogData);
             }
