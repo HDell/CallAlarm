@@ -10,9 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 
@@ -21,8 +23,10 @@ import java.util.List;
 
 public class DetailsHistoryFragment extends Fragment {
 
+    public static final String TAG = "DetailsHistoryFragment";
+
     String name;
-    String number;
+    String contactNumber;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,8 +34,9 @@ public class DetailsHistoryFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.details_history_fragment, container, false);
 
         if(getActivity().getIntent().hasExtra("name")&&getActivity().getIntent().hasExtra("number")){
+            Log.d(TAG, "Successfully passed intent to Fragment.");
             name = getActivity().getIntent().getStringExtra("name");
-            number = getActivity().getIntent().getStringExtra("number");
+            contactNumber = getActivity().getIntent().getStringExtra("number");
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.details_history_recycler_view);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -40,6 +45,7 @@ public class DetailsHistoryFragment extends Fragment {
             recyclerView.setAdapter(adapter);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
             recyclerView.addItemDecoration(dividerItemDecoration);
+
         }
 
         // 1. get a reference to recyclerView
@@ -110,7 +116,7 @@ public class DetailsHistoryFragment extends Fragment {
                 CallLogData callLogData = new CallLogData(name, number, callTypeString, callDate, callDuration);
 
                 //before adding, check the number against the database && against the contact and only add if the number is present there
-                if (callLogData.getStrippedNumber().equals(number)) {
+                if (callLogData.getStrippedNumber().equals(contactNumber)) {
                     callDetails.add(callLogData);
                 }
             }

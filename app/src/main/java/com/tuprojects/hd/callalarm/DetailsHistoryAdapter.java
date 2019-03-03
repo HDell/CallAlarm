@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class DetailsHistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+public class DetailsHistoryAdapter extends RecyclerView.Adapter<DetailsHistoryAdapter.ViewHolder> {
 
     //State
     private List<CallLogData> dataset;
@@ -39,16 +39,16 @@ public class DetailsHistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.V
 
     //ViewHolder Behavior // Create new views (invoked by the layout manager) //NECESSARY
     @Override
-    public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DetailsHistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.details_history_recyclerview_row, parent, false);
-        HistoryAdapter.ViewHolder viewHolder = new HistoryAdapter.ViewHolder(view);
+        DetailsHistoryAdapter.ViewHolder viewHolder = new DetailsHistoryAdapter.ViewHolder(view);
         return viewHolder;
     }
 
     // Replace the contents of a view (invoked by the layout manager) //NECESSARY
     @Override
-    public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(DetailsHistoryAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();

@@ -83,8 +83,8 @@ public class DetailsActivity extends AppCompatActivity {
             TextView abc = (TextView) findViewById(R.id.abc);
             abc.setText(name);
 
-            fragmentTransaction.add(R.id.fragment_description_container, detailsDescriptionFragment).commit();
-            fragmentTransaction.add(R.id.fragment_frequency_container, detailsFrequencyFragment).commit();
+            //fragmentTransaction.add(R.id.fragment_description_container, detailsDescriptionFragment).commit();
+            //fragmentTransaction.add(R.id.fragment_frequency_container, detailsFrequencyFragment).commit();
             fragmentTransaction.add(R.id.fragment_history_container, detailsHistoryFragment).commit();
 
 
