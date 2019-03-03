@@ -25,23 +25,6 @@ import android.widget.Toast;
 VIEW
  */
 
-/*
-MODEL:
-
-    This class will serve as an abstraction of the contact list data that is pulled from the phone.
-    Ultimately the data will be formatted as such:
-
-    [
-        ("Call ID", "FirstName", "LastName", "Length of call", "Date of call", "Time of call", "Incoming vs. Outgoing"),
-        ("Call ID", "FirstName", "LastName", "Length of call", "Date of call", "Time of call", "Incoming vs. Outgoing"),
-        ...,
-    ]
-
-    [
-        (Consider only looking at the last x number of calls in the users call log)
-        - Look into the new Call Log Permission policy implemented by Android
-    ]
- */
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_contacts: // (item.getItemId() == R.id.navigation_contacts)
 
+                    navScreen = 0;
+                    restart = false;
+
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
                     fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
@@ -78,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_call_list:
 
-                    navScreen = 0;
+                    navScreen = 1;
                     restart = false;
 
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
@@ -96,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_history:
 
-                    navScreen = 1;
+                    navScreen = 2;
                     restart = false;
 
                     if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
@@ -139,8 +125,19 @@ public class MainActivity extends AppCompatActivity {
             //View Behavior
             navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
-            //Start Fragment on Contacts
-            fragmentTransaction.add(R.id.fragment_container, contactsFragment).commit();
+            if (getIntent().getExtras() != null) {
+                navScreen = getIntent().getExtras().getInt("navScreen");
+                if (navScreen == 0) {
+                    navigation.setSelectedItemId(R.id.navigation_contacts);
+                } else if (navScreen == 1) {
+                    navigation.setSelectedItemId(R.id.navigation_call_list);
+                } else { //navScreen == 2
+                    navigation.setSelectedItemId(R.id.navigation_history);
+                }
+            } else {
+                //Start Fragment on Contacts Screen (as default)
+                fragmentTransaction.add(R.id.fragment_container, contactsFragment).commit();
+            }
 
             /* (Not sure about this method)
             // Check that the activity is using the layout version with
@@ -188,8 +185,10 @@ public class MainActivity extends AppCompatActivity {
 
                         //Directs UI to appropriate screen
                         if (navScreen == 0) {
+                            fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
+                        } else if (navScreen == 1) {
                             fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
-                        } else { //navScreen == 1
+                        } else { //navScreen == 2
                             fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
                         }
                     }

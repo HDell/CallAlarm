@@ -31,9 +31,6 @@ public class ContactsFragment extends Fragment {
         // 2. set layoutManger
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        // use a linear layout manager
-        //layoutManager = new LinearLayoutManager(this); //this assumes that we're creating directly from Activity
-        //recyclerView.setLayoutManager(layoutManager || RecyclerView.LayoutManager);
 
         // 3. create an adapter
         ContactsAdapter adapter = new ContactsAdapter(getAndroidContacts());
