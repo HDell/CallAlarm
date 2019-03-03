@@ -7,34 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
-    
+public class DetailsHistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+
     //State
     private List<CallLogData> dataset;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //State
-        public TextView nameTextView;
         public TextView detailsTextView;
         public ConstraintLayout parentLayout;
 
         //Constructor
         public ViewHolder(View itemView) {
             super(itemView);
-            this.nameTextView = itemView.findViewById(R.id.history_name_holder);
-            this.detailsTextView = itemView.findViewById(R.id.history_details_holder);
-            this.parentLayout = itemView.findViewById(R.id.history_layout);
+            this.detailsTextView = itemView.findViewById(R.id.details_history_holder);
+            this.parentLayout = itemView.findViewById(R.id.details_history_layout);
         }
 
     }
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public HistoryAdapter(List<CallLogData> dataset) {
+    public DetailsHistoryAdapter(List<CallLogData> dataset) {
         this.dataset = dataset;
     }
 
@@ -44,7 +41,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     @Override
     public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.history_recyclerview_row, parent, false);
+        View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.details_history_recyclerview_row, parent, false);
         HistoryAdapter.ViewHolder viewHolder = new HistoryAdapter.ViewHolder(view);
         return viewHolder;
     }
@@ -54,8 +51,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-            //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();
-        holder.nameTextView.setText(dataset.get(position).getName());
+        //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();
+        //holder.nameTextView.setText(dataset.get(position).getName());
 
         String details = dataset.get(position).getType()+", "+dataset.get(position).getDate();
         holder.detailsTextView.setText(details);
@@ -67,4 +64,5 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public int getItemCount() {
         return dataset.size();
     }
+
 }

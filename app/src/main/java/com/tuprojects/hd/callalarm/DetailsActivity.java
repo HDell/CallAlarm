@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,7 +21,13 @@ import android.widget.TextView;
 //Activity which will contain a Fragment for each individual Contact
 public class DetailsActivity extends AppCompatActivity {
 
+    DetailsDescriptionFragment detailsDescriptionFragment = new DetailsDescriptionFragment();
+    DetailsFrequencyFragment detailsFrequencyFragment = new DetailsFrequencyFragment();
+    DetailsHistoryFragment detailsHistoryFragment = new DetailsHistoryFragment();
 
+    //Manager Set Up
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +82,12 @@ public class DetailsActivity extends AppCompatActivity {
             String number = getIntent().getStringExtra("number");
             TextView abc = (TextView) findViewById(R.id.abc);
             abc.setText(name);
+
+            fragmentTransaction.add(R.id.fragment_description_container, detailsDescriptionFragment).commit();
+            fragmentTransaction.add(R.id.fragment_frequency_container, detailsFrequencyFragment).commit();
+            fragmentTransaction.add(R.id.fragment_history_container, detailsHistoryFragment).commit();
+
+
         }
 
     }
