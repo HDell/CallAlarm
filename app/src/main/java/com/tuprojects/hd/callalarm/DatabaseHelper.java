@@ -2,6 +2,7 @@ package com.tuprojects.hd.callalarm;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
@@ -43,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL0 + "INTEGER PRIMARY KEY AUTOINCREMENT, "
+        String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COL1 + " TEXT, "
                 + COL2 + " TEXT, "
                 + COL3 + " INTEGER, "
@@ -73,6 +74,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return true;
         }
-
     }
+
+    public boolean removeData(String strippedNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long result = db.delete(TABLE_NAME, COL1 + " = ?", new String[]{strippedNumber});
+
+        if (result==-1) { //negatively inserted data will be result in -1
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean hasContact(String strippedNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor contactsDBcursor = db.query(TABLE_NAME, null, COL1 + " =?", new String[]{strippedNumber}, null, null, null);
+
+        if ((contactsDBcursor != null) && (contactsDBcursor.getCount() > 0)) { //check if Cursor (database) is empty after querying it
+            return true;
+        } else  {
+            return false;
+        }
+    }
+
 }
