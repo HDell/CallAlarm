@@ -4,18 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.tuprojects.hd.callalarm.AndroidContact;
 
 import java.util.List;
 
 //Interface between the (Contacts) data source and the AdapterView (ListView->RecyclerView) layout
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+
+    public static final String TAG = "ContactsAdapter";
+
 
     //State
     private List<AndroidContact> dataset;
@@ -74,10 +75,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "JUST TESTING THAT I WORK", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Successfully Contact from Contacts List.");
                 Intent intent = new Intent(context, DetailsActivity.class);
-                intent.putExtra("name", androidContact.getName());
-                intent.putExtra("number", androidContact.getStrippedPhoneNum(0));
+                intent.putExtra("contactName", androidContact.getName());
+                intent.putExtra("strippedContactNumber", androidContact.getStrippedPhoneNum(0));
+                intent.putExtra("contactNumber", androidContact.getPhoneNum(0));
                 context.startActivity(intent);
             }
         });

@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 
@@ -26,17 +25,17 @@ public class DetailsHistoryFragment extends Fragment {
     public static final String TAG = "DetailsHistoryFragment";
 
     String name;
-    String contactNumber;
+    String strippedContactNumber;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.details_history_fragment, container, false);
 
-        if(getActivity().getIntent().hasExtra("name")&&getActivity().getIntent().hasExtra("number")){
+        if(getActivity().getIntent().hasExtra("contactName")&&getActivity().getIntent().hasExtra("strippedContactNumber")){
             Log.d(TAG, "Successfully passed intent to Fragment.");
-            name = getActivity().getIntent().getStringExtra("name");
-            contactNumber = getActivity().getIntent().getStringExtra("number");
+            name = getActivity().getIntent().getStringExtra("contactName");
+            strippedContactNumber = getActivity().getIntent().getStringExtra("strippedContactNumber");
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.details_history_recycler_view);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -48,24 +47,10 @@ public class DetailsHistoryFragment extends Fragment {
 
         }
 
-        // 1. get a reference to recyclerView
-
-        //private RecyclerView recyclerView;
-        //recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-
-        // 2. set layoutManger
-
-
-        // 3. create an adapter
-        //ContactsAdapter adapter = new ContactsAdapter(getContext(), getAndroidContacts());
-
-        // 4. set adapter
-        //recyclerView.setAdapter(adapter);
-
         return rootView;
     }
 
+    //Turn into an Abstract/Interface method
     private List<CallLogData> getCallDetails() {
         List<CallLogData> callDetails = new ArrayList<>();
         //Because this check is required, it may be redundant to check for this in the onClickListener in MainActivity
@@ -116,7 +101,7 @@ public class DetailsHistoryFragment extends Fragment {
                 CallLogData callLogData = new CallLogData(name, number, callTypeString, callDate, callDuration);
 
                 //before adding, check the number against the database && against the contact and only add if the number is present there
-                if (callLogData.getStrippedNumber().equals(contactNumber)) {
+                if (callLogData.getStrippedNumber().equals(strippedContactNumber)) {
                     callDetails.add(callLogData);
                 }
             }

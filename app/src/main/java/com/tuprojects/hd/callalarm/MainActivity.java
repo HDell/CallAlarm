@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
+                    fragmentTransaction.replace(R.id.fragment_container, contactsFragment).commit();
 
                     return true;
                 case R.id.navigation_call_list:
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
                         // and add the transaction to the back stack
-                        fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
+                        fragmentTransaction.replace(R.id.fragment_container, callListFragment).commit();
                     }
 
                     return true;
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
                         // and add the transaction to the back stack
-                        fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
+                        fragmentTransaction.replace(R.id.fragment_container, historyFragment).commit();
                     }
 
                     return true;

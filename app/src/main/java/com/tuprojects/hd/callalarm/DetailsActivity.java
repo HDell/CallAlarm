@@ -77,15 +77,17 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void getIncomingIntent() {
 
-        if (getIntent().hasExtra("name")&&getIntent().hasExtra("number")) {
-            String name = getIntent().getStringExtra("name");
-            String number = getIntent().getStringExtra("number");
-            TextView abc = (TextView) findViewById(R.id.abc);
-            abc.setText(name);
+        if (getIntent().hasExtra("contactName")&&getIntent().hasExtra("strippedContactNumber")) {
+            //String name = getIntent().getStringExtra("name");
+            //String number = getIntent().getStringExtra("number");
+            //TextView abc = (TextView) findViewById(R.id.abc);
+            //abc.setText(name);
 
-            //fragmentTransaction.add(R.id.fragment_description_container, detailsDescriptionFragment).commit();
+            fragmentTransaction.add(R.id.fragment_description_container, detailsDescriptionFragment);
             //fragmentTransaction.add(R.id.fragment_frequency_container, detailsFrequencyFragment).commit();
-            fragmentTransaction.add(R.id.fragment_history_container, detailsHistoryFragment).commit();
+            fragmentTransaction.add(R.id.fragment_history_container, detailsHistoryFragment);
+
+            fragmentTransaction.commit();
 
 
         }
