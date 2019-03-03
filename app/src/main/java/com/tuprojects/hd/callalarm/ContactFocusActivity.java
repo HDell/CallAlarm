@@ -16,13 +16,13 @@ import android.view.MenuItem;
  */
 
 //Activity which will contain a Fragment for each individual Contact
-public class ContactFocus extends AppCompatActivity {
+public class ContactFocusActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Default Methods
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contact_focus);
+        setContentView(R.layout.activity_contact_focus);
 
         //Initializations
         //Views
