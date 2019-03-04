@@ -113,8 +113,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getCallListCursor() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        List<String> allStrippedNumbers = new ArrayList<>();
-
         try {
             return db.query(TABLE_NAME, null, null, null, null, null, null);
         } catch (Exception ex) {
