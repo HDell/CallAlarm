@@ -40,7 +40,7 @@ public class FragmentDetailsHistory extends Fragment {
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.details_history_recycler_view);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
-            AdapterDetailsHistory adapter = new AdapterDetailsHistory(getCallDetails());
+            AdapterDetailsHistory adapter = new AdapterDetailsHistory(getCallDetails(new DatabaseHelper(getContext()).getCallListCursor()));
             recyclerView.setAdapter(adapter);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
             recyclerView.addItemDecoration(dividerItemDecoration);
@@ -51,7 +51,8 @@ public class FragmentDetailsHistory extends Fragment {
     }
 
     //Turn into an Abstract/Interface method
-    private List<CallLogData> getCallDetails() {
+    private List<CallLogData> getCallDetails(Cursor cursor) {
+        cursor.moveToPosition(-1);//Ensures that entire database is queried
         List<CallLogData> callDetails = new ArrayList<>();
         //Because this check is required, it may be redundant to check for this in the onClickListener in ActivityMain
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
@@ -62,6 +63,7 @@ public class FragmentDetailsHistory extends Fragment {
             }
         } else {
             Cursor cursorCallDetails = getContext().getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, null);
+            cursorCallDetails.moveToPosition(-1);//Ensures that entire call log is traversed
             int numberIndex = cursorCallDetails.getColumnIndex(CallLog.Calls.NUMBER);
             int callTypeIndex = cursorCallDetails.getColumnIndex(CallLog.Calls.TYPE);
             int callDurationIndex = cursorCallDetails.getColumnIndex(CallLog.Calls.DURATION); //Returns Duration in seconds
@@ -101,10 +103,14 @@ public class FragmentDetailsHistory extends Fragment {
                 CallLogData callLogData = new CallLogData(name, number, callTypeString, callDate, callDuration);
 
                 //before adding, check the number against the database && against the contact and only add if the number is present there
-                if (callLogData.getStrippedNumber().equals(strippedContactNumber)) {
-                    callDetails.add(callLogData);
+                while (cursor.moveToNext()) {
+                    if (callLogData.getStrippedNumber().equals(strippedContactNumber)&&callLogData.getStrippedNumber().equals(cursor.getString(cursor.getColumnIndex("stripped_phone_number")))) {
+                        callDetails.add(callLogData);
+                    }
                 }
+                cursor.moveToPosition(-1);
             }
+            cursor.close();
             cursorCallDetails.close();
             List<CallLogData> callDetailsReversed = Lists.reverse(callDetails);
             return callDetailsReversed;

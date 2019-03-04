@@ -76,7 +76,7 @@ public class FragmentHistory extends Fragment {
         testData.add(testDataDetails);
 
         // 3. create an adapter
-        AdapterHistory adapter = new AdapterHistory(getCallDetails(new DatabaseHelper(getContext()).getCallListCursor()));
+        AdapterHistory adapter = new AdapterHistory(getContext(), getCallDetails(new DatabaseHelper(getContext()).getCallListCursor()));
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);

@@ -17,7 +17,6 @@ public class AdapterContacts extends RecyclerView.Adapter<AdapterContacts.ViewHo
 
     public static final String TAG = "AdapterContacts";
 
-
     //State
     private List<AndroidContact> dataset;
     private Context context;
@@ -75,7 +74,7 @@ public class AdapterContacts extends RecyclerView.Adapter<AdapterContacts.ViewHo
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Successfully Contact from Contacts List.");
+                Log.d(TAG, "Successfully added Contact from Contacts List.");
                 Intent intent = new Intent(context, ActivityDetails.class);
                 intent.putExtra("contactName", androidContact.getName());
                 intent.putExtra("strippedContactNumber", androidContact.getStrippedPhoneNum(0));

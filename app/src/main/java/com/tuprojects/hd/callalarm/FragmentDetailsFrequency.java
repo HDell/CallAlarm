@@ -31,6 +31,8 @@ public class FragmentDetailsFrequency extends Fragment {
 
         contactDB = new DatabaseHelper(getContext()); //have this interface w/ CallListContact instead of database in the future
 
+        final FragmentDetailsHistory fragmentDetailsHistory = new FragmentDetailsHistory();
+
         //Remove these hasExtra conditionals later. This check is already done in the parent Activity.
         if(getActivity().getIntent().hasExtra("contactName")&&getActivity().getIntent().hasExtra("strippedContactNumber")){
             name = getActivity().getIntent().getStringExtra("contactName");
@@ -41,6 +43,7 @@ public class FragmentDetailsFrequency extends Fragment {
                 //Set the box to checked if the contact is in db
                 if(contactDB.hasContact(strippedContactNumber)){
                     checkBox.setChecked(true);
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_history_container, fragmentDetailsHistory).commit();
                 } else {
                     checkBox.setChecked(false);
                 }
@@ -55,6 +58,7 @@ public class FragmentDetailsFrequency extends Fragment {
                         if (insertData) {
                             Log.d(TAG, "Successfully inserted data.");
                             Toast.makeText(getContext(), "Successfully added "+name+" to database!", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_history_container, fragmentDetailsHistory).commit();
                         } else { //insertData = false
                             Log.d(TAG, "Failed to insert data.");
                             Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
@@ -65,6 +69,7 @@ public class FragmentDetailsFrequency extends Fragment {
                         if (removeData) {
                             Log.d(TAG, "Successfully removed data.");
                             Toast.makeText(getContext(), "Successfully removed "+name+" from database!", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentDetailsHistory).commit();
                         } else {
                             Log.d(TAG, "Failed to remove data.");
                             Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();

@@ -12,7 +12,7 @@
         android:id="@+id/details_history_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dummy_text"
+        android:text="@string/no_call_log"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

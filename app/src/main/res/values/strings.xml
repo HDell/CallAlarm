@@ -9,5 +9,7 @@
     <string name="call_list_frequency">Call Frequency:</string>
     <string name="call_list_history">Call History:</string>
 
+    <string name="no_call_log">No Call History Available</string>
+
 
 </resources>

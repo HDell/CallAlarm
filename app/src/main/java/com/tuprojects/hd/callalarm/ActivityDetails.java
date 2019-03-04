@@ -80,7 +80,7 @@ public class ActivityDetails extends AppCompatActivity {
 
             fragmentTransaction.add(R.id.fragment_description_container, fragmentDetailsDescription);
             fragmentTransaction.add(R.id.fragment_frequency_container, fragmentDetailsFrequency);
-            fragmentTransaction.add(R.id.fragment_history_container, fragmentDetailsHistory);
+            //the details history fragment is instantiated from within the details frequency fragment
 
             fragmentTransaction.commit();
 
