@@ -13,9 +13,9 @@ import android.widget.TextView;
 import java.util.List;
 
 //Interface between the (Contacts) data source and the AdapterView (ListView->RecyclerView) layout
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+public class AdapterContacts extends RecyclerView.Adapter<AdapterContacts.ViewHolder> {
 
-    public static final String TAG = "ContactsAdapter";
+    public static final String TAG = "AdapterContacts";
 
 
     //State
@@ -45,7 +45,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ContactsAdapter(Context context, List<AndroidContact> dataset) {
+    public AdapterContacts(Context context, List<AndroidContact> dataset) {
         this.context = context;
         this.dataset = dataset;
     }
@@ -54,7 +54,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //ViewHolder Behavior // Create new views (invoked by the layout manager) //NECESSARY
     @Override
-    public ContactsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterContacts.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_recyclerview_row, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
@@ -76,7 +76,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Successfully Contact from Contacts List.");
-                Intent intent = new Intent(context, DetailsActivity.class);
+                Intent intent = new Intent(context, ActivityDetails.class);
                 intent.putExtra("contactName", androidContact.getName());
                 intent.putExtra("strippedContactNumber", androidContact.getStrippedPhoneNum(0));
                 intent.putExtra("contactNumber", androidContact.getPhoneNum(0));

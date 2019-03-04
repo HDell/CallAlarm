@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 /*
     From this screen, users will have the ability to:
@@ -19,11 +18,11 @@ import android.widget.TextView;
  */
 
 //Activity which will contain a Fragment for each individual Contact
-public class DetailsActivity extends AppCompatActivity {
+public class ActivityDetails extends AppCompatActivity {
 
-    DetailsDescriptionFragment detailsDescriptionFragment = new DetailsDescriptionFragment();
-    DetailsFrequencyFragment detailsFrequencyFragment = new DetailsFrequencyFragment();
-    DetailsHistoryFragment detailsHistoryFragment = new DetailsHistoryFragment();
+    FragmentDetailsDescription fragmentDetailsDescription = new FragmentDetailsDescription();
+    FragmentDetailsFrequency fragmentDetailsFrequency = new FragmentDetailsFrequency();
+    FragmentDetailsHistory fragmentDetailsHistory = new FragmentDetailsHistory();
 
     //Manager Set Up
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -39,7 +38,7 @@ public class DetailsActivity extends AppCompatActivity {
         //Views
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.focus_navigation); //syncs nav object w/ layout
         //Intent
-        final Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, ActivityMain.class);
         //Listener - instantiated in onCreate in order to pass intent extras
         BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {//listens for clicks
 
@@ -79,9 +78,9 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("contactName")&&getIntent().hasExtra("strippedContactNumber")&&getIntent().hasExtra("contactNumber")) { //No need to check for these in the fragments
 
-            fragmentTransaction.add(R.id.fragment_description_container, detailsDescriptionFragment);
-            fragmentTransaction.add(R.id.fragment_frequency_container, detailsFrequencyFragment);
-            fragmentTransaction.add(R.id.fragment_history_container, detailsHistoryFragment);
+            fragmentTransaction.add(R.id.fragment_description_container, fragmentDetailsDescription);
+            fragmentTransaction.add(R.id.fragment_frequency_container, fragmentDetailsFrequency);
+            fragmentTransaction.add(R.id.fragment_history_container, fragmentDetailsHistory);
 
             fragmentTransaction.commit();
 

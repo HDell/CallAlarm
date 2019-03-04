@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class DetailsDescriptionFragment extends Fragment {
+public class FragmentDetailsDescription extends Fragment {
 
     public static final String TAG = "DetailsDescFragment";
 

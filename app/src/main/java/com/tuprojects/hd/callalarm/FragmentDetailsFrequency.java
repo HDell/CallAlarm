@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-public class DetailsFrequencyFragment extends Fragment {
+public class FragmentDetailsFrequency extends Fragment {
 
     public static final String TAG = "DetailsFreqFragment";
 
@@ -29,7 +29,7 @@ public class DetailsFrequencyFragment extends Fragment {
 
         parentLayout = rootView.findViewById(R.id.details_frequency_layout);
 
-        contactDB = new DatabaseHelper(getContext()); //have this interface w/ StoredCallList instead of database in the future
+        contactDB = new DatabaseHelper(getContext()); //have this interface w/ CallListContact instead of database in the future
 
         //Remove these hasExtra conditionals later. This check is already done in the parent Activity.
         if(getActivity().getIntent().hasExtra("contactName")&&getActivity().getIntent().hasExtra("strippedContactNumber")){
@@ -51,7 +51,7 @@ public class DetailsFrequencyFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                     if (isChecked) {
                         //Add contact to database
-                        boolean insertData = contactDB.addData(strippedContactNumber, 0, 0, 0);
+                        boolean insertData = contactDB.addData(strippedContactNumber, 0, 0, 0, name);
                         if (insertData) {
                             Log.d(TAG, "Successfully inserted data.");
                             Toast.makeText(getContext(), "Successfully added "+name+" to database!", Toast.LENGTH_SHORT).show();

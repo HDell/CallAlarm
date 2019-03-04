@@ -2,6 +2,7 @@ package com.tuprojects.hd.callalarm;
 
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHolder> {
+public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHolder> {
+
+    public static final String TAG = "AdapterCallList";
 
     //State
-    private List<List<String>> dataset;
+    private List<CallListContact> dataset;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -41,7 +44,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CallListAdapter(List<List<String>> dataset) {
+    public AdapterCallList(List<CallListContact> dataset) {
         this.dataset = dataset;
     }
 
@@ -49,21 +52,35 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ViewHo
 
     //ViewHolder Behavior // Create new views (invoked by the layout manager) //NECESSARY
     @Override
-    public CallListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterCallList.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.call_list_recyclerview_row, parent, false);
-        CallListAdapter.ViewHolder viewHolder = new CallListAdapter.ViewHolder(view);
+        AdapterCallList.ViewHolder viewHolder = new AdapterCallList.ViewHolder(view);
         return viewHolder;
     }
 
     // Replace the contents of a view (invoked by the layout manager) //NECESSARY
     @Override
-    public void onBindViewHolder(CallListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterCallList.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.nameTextView.setText(dataset.get(0).get(position));
-        holder.frequencyTextView.setText(dataset.get(1).get(position));
-        holder.historyTextView.setText(dataset.get(2).get(position));
+
+        Log.d(TAG, "DB Rows: "+dataset.size());
+        //Log.d(TAG, ""+dataset.get(position).getCallLogData());
+
+        String name = dataset.get(position).getAndroidContact().getName();
+        //String frequency = dataset.get(position).getCallLogData().get(0).getDuration();
+        String history = "";
+        try {
+            history = dataset.get(position).getCallLogData().get(0).getDate() + ", " + dataset.get(position).getCallLogData().get(0).getDuration();
+        } catch (IndexOutOfBoundsException e) {
+            history = "No call history available.";
+        }
+
+        holder.nameTextView.setText(name);
+        //holder.frequencyTextView.setText(frequency);
+        holder.historyTextView.setText(history);
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

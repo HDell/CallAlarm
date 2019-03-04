@@ -1,11 +1,16 @@
 package com.tuprojects.hd.callalarm;
 
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 MODEL:
@@ -37,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL4 = "calls_per_period"; //integer
     private static final String COL5 = "frequency"; //integer
     private static final String COL6 = "period"; //integer [1=day, 7=week, 30=month, 90=quarter]
+    private static final String COL7 = "name"; //string
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -50,7 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL3 + " INTEGER, "
                 + COL4 + " INTEGER, "
                 + COL5 + " INTEGER, "
-                + COL6 + " INTEGER);";
+                + COL6 + " INTEGER, "
+                + COL7 + " TEXT);";
         db.execSQL(createTable);
     }
 
@@ -59,13 +66,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean addData(String strippedNumber, int cpp, int freq, int per) {
+    public boolean addData(String strippedNumber, int cpp, int freq, int per, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, strippedNumber);
         contentValues.put(COL2, cpp);
         contentValues.put(COL3, freq);
         contentValues.put(COL4, per);
+        contentValues.put(COL7, name);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
@@ -94,10 +102,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor contactsDBcursor = db.query(TABLE_NAME, null, COL1 + " =?", new String[]{strippedNumber}, null, null, null);
 
         if ((contactsDBcursor != null) && (contactsDBcursor.getCount() > 0)) { //check if Cursor (database) is empty after querying it
+            contactsDBcursor.close();
             return true;
         } else  {
+            contactsDBcursor.close();
             return false;
         }
+    }
+
+    public Cursor getCallListCursor() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        List<String> allStrippedNumbers = new ArrayList<>();
+
+        try {
+            return db.query(TABLE_NAME, null, null, null, null, null, null);
+        } catch (Exception ex) {
+            Log.e("Error on contact ", ex.getMessage());
+        }
+
+        return null;
+
     }
 
 }
