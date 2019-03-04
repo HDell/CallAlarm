@@ -1,5 +1,7 @@
 package com.tuprojects.hd.callalarm;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +18,7 @@ public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHo
 
     //State
     private List<CallListContact> dataset;
+    private Context context;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -44,7 +47,8 @@ public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHo
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AdapterCallList(List<CallListContact> dataset) {
+    public AdapterCallList(Context context, List<CallListContact> dataset) {
+        this.context = context;
         this.dataset = dataset;
     }
 
@@ -65,10 +69,12 @@ public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHo
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
+        final AndroidContact androidContact = dataset.get(position).getAndroidContact();
+
         Log.d(TAG, "DB Rows: "+dataset.size());
         //Log.d(TAG, ""+dataset.get(position).getCallLogData());
 
-        String name = dataset.get(position).getAndroidContact().getName();
+        String name = androidContact.getName();
         //String frequency = dataset.get(position).getCallLogData().get(0).getDuration();
         String history = "";
         try {
@@ -80,6 +86,17 @@ public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHo
         holder.nameTextView.setText(name);
         //holder.frequencyTextView.setText(frequency);
         holder.historyTextView.setText(history);
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ActivityDetails.class);
+                intent.putExtra("contactName", androidContact.getName());
+                intent.putExtra("strippedContactNumber", androidContact.getStrippedPhoneNum(0));
+                intent.putExtra("contactNumber", androidContact.getPhoneNum(0));
+                context.startActivity(intent);
+            }
+        });
 
     }
 

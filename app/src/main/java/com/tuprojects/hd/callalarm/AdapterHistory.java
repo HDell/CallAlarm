@@ -58,14 +58,15 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
     @Override
     public void onBindViewHolder(AdapterHistory.ViewHolder holder, int position) {
 
-        final CallLogData callLogData = dataset.get(position);
-
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-            //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();
-        holder.nameTextView.setText(dataset.get(position).getName());
 
-        String details = dataset.get(position).getType()+", "+dataset.get(position).getDate();
+        final CallLogData callLogData = dataset.get(position);
+
+            //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();
+        holder.nameTextView.setText(callLogData.getName());
+
+        String details = callLogData.getType()+", "+callLogData.getDate();
         holder.detailsTextView.setText(details);
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {

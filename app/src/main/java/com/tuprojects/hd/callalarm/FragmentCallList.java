@@ -64,7 +64,7 @@ public class FragmentCallList extends Fragment {
         testData.add(testDataHistory);*/
 
         // 3. create an adapter
-        AdapterCallList adapter = new AdapterCallList(getCallList());
+        AdapterCallList adapter = new AdapterCallList(getContext(), getCallList());
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);

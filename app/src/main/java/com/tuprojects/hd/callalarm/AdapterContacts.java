@@ -69,7 +69,7 @@ public class AdapterContacts extends RecyclerView.Adapter<AdapterContacts.ViewHo
         final AndroidContact androidContact = dataset.get(position);
 
         //String tempDetails = dataset.get(position).getStrippedPhoneNum(0) + "||" + dataset.get(position).getName();
-        holder.textView.setText(dataset.get(position).getName()); //dataset.get(position).getName()
+        holder.textView.setText(androidContact.getName()); //dataset.get(position).getName()
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
