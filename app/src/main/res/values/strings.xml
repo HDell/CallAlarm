@@ -11,5 +11,11 @@
 
     <string name="no_call_log">No Call History Available</string>
 
+    <string name="default_details_hint">0</string>
+    <string name="period_day">Day(s)</string>
+    <string name="period_week">Week(s)</string>
+    <string name="period_Month">Month(s)</string>
+    <string name="period_Quarter">Quarter(s)</string>
+
 
 </resources>

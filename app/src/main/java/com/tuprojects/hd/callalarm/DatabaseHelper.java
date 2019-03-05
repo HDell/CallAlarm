@@ -70,14 +70,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, strippedNumber);
-        contentValues.put(COL2, cpp);
-        contentValues.put(COL3, freq);
-        contentValues.put(COL4, per);
+        contentValues.put(COL4, cpp);
+        contentValues.put(COL5, freq);
+        contentValues.put(COL6, per);
         contentValues.put(COL7, name);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
+        db.close();
+
         if (result==-1) { //negatively inserted data will be result in -1
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean updateCallsPerPeriod(int newCPP, String strippedNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL4, newCPP);
+
+        long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
+
+        db.close();
+
+        if (result==-1) { //negatively updated data will be result in -1
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean updateFrequency(int newFreq, String strippedNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL5, newFreq);
+
+        long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
+
+        db.close();
+
+        if (result==-1) { //negatively updated data will be result in -1
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean updatePeriod(int newPeriod, String strippedNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL6, newPeriod);
+
+        long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
+
+        db.close();
+
+        if (result==-1) { //negatively updated data will be result in -1
             return false;
         } else {
             return true;
@@ -89,7 +139,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.delete(TABLE_NAME, COL1 + " = ?", new String[]{strippedNumber});
 
-        if (result==-1) { //negatively inserted data will be result in -1
+        db.close();
+
+        if (result==-1) { //negatively deleted data will be result in -1
             return false;
         } else {
             return true;
@@ -97,21 +149,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean hasContact(String strippedNumber) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor contactsDBcursor = db.query(TABLE_NAME, null, COL1 + " =?", new String[]{strippedNumber}, null, null, null);
 
         if ((contactsDBcursor != null) && (contactsDBcursor.getCount() > 0)) { //check if Cursor (database) is empty after querying it
             contactsDBcursor.close();
+            db.close();
             return true;
         } else  {
             contactsDBcursor.close();
+            db.close();
             return false;
         }
     }
 
     public Cursor getCallListCursor() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         try {
             return db.query(TABLE_NAME, null, null, null, null, null, null);

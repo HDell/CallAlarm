@@ -22,7 +22,7 @@ public class ActivityDetails extends AppCompatActivity {
 
     FragmentDetailsDescription fragmentDetailsDescription = new FragmentDetailsDescription();
     FragmentDetailsFrequency fragmentDetailsFrequency = new FragmentDetailsFrequency();
-    FragmentDetailsHistory fragmentDetailsHistory = new FragmentDetailsHistory();
+    //FragmentDetailsHistory fragmentDetailsHistory = new FragmentDetailsHistory();
 
     //Manager Set Up
     FragmentManager fragmentManager = getSupportFragmentManager();
