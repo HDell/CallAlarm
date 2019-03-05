@@ -198,8 +198,8 @@ public class FragmentDetailsFrequency extends Fragment {
                     }
 
                     if (!(days.isChecked()||weeks.isChecked()||months.isChecked()||quarters.isChecked())) {
-                        days.setChecked(true);
-                        per = 1;
+                        weeks.setChecked(true);
+                        per = 7;
                     }
 
                     //Add contact to database
