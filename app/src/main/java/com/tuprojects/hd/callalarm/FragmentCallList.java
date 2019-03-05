@@ -97,6 +97,7 @@ public class FragmentCallList extends Fragment {
         }
 
         callListCursor.close();
+        db.closeReadableDatabase(); //prevents memory leaks
         return callListContacts;
 
     }

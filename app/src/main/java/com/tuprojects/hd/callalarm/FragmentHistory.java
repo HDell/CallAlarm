@@ -76,14 +76,15 @@ public class FragmentHistory extends Fragment {
         testData.add(testDataDetails);
 
         // 3. create an adapter
-        AdapterHistory adapter = new AdapterHistory(getContext(), getCallDetails(new DatabaseHelper(getContext()).getCallListCursor()));
+        DatabaseHelper db = new DatabaseHelper(getContext());
+        AdapterHistory adapter = new AdapterHistory(getContext(), getCallDetails(db.getCallListCursor()));
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-
+        db.closeReadableDatabase(); //prevents memory leaks
         return rootView;
     }
 

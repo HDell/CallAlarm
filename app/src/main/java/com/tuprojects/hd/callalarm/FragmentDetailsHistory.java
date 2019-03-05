@@ -40,11 +40,12 @@ public class FragmentDetailsHistory extends Fragment {
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.details_history_recycler_view);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
-            AdapterDetailsHistory adapter = new AdapterDetailsHistory(getCallDetails(new DatabaseHelper(getContext()).getCallListCursor()));
+            DatabaseHelper db = new DatabaseHelper(getContext());
+            AdapterDetailsHistory adapter = new AdapterDetailsHistory(getCallDetails(db.getCallListCursor()));
             recyclerView.setAdapter(adapter);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
             recyclerView.addItemDecoration(dividerItemDecoration);
-
+            db.closeReadableDatabase(); //prevents memory leaks
         }
 
         return rootView;

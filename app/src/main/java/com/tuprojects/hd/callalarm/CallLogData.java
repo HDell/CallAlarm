@@ -79,6 +79,18 @@ public class CallLogData {
         return type;
     }
 
+    public int getDurationInHours() {
+        return (durationInt/60)/60;
+    }
+
+    public int getDurationInMinutes() {
+        return durationInt/60;
+    }
+
+    public int getDurationInSeconds() {
+        return durationInt;
+    }
+
     public String getDuration() { //formatted
         if (hours>0) {
             return hours + " hrs., " + minutes + " min., " + seconds + " sec.";

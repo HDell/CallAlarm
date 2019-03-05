@@ -48,11 +48,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, TABLE_NAME, null, 1);
     }
 
+    SQLiteDatabase readableDatabase;
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COL1 + " TEXT, "
-                + COL2 + " TEXT, "
+                + COL2 + " DATE, "
                 + COL3 + " INTEGER, "
                 + COL4 + " INTEGER, "
                 + COL5 + " INTEGER, "
@@ -65,6 +67,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+    public void openReadableDatabase() {
+        readableDatabase = this.getReadableDatabase();
+    }
+
+    //Necessary to prevent memory leaks
+    public void closeReadableDatabase() {
+        readableDatabase.close();
+    }
+
+    public boolean addData(String strippedNumber, String date, int duration, int cpp, int freq, int per, String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL1, strippedNumber);
+        contentValues.put(COL2, date);
+        contentValues.put(COL3, duration);
+        contentValues.put(COL4, cpp);
+        contentValues.put(COL5, freq);
+        contentValues.put(COL6, per);
+        contentValues.put(COL7, name);
+
+        long result = db.insert(TABLE_NAME, null, contentValues);
+
+        db.close();
+
+        if (result == -1) { //negatively inserted data will be result in -1
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     public boolean addData(String strippedNumber, int cpp, int freq, int per, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -151,7 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean hasContact(String strippedNumber) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor contactsDBcursor = db.query(TABLE_NAME, null, COL1 + " =?", new String[]{strippedNumber}, null, null, null);
+        Cursor contactsDBcursor = db.query(TABLE_NAME, null, COL1 + " = ?", new String[]{strippedNumber}, null, null, null);
 
         if ((contactsDBcursor != null) && (contactsDBcursor.getCount() > 0)) { //check if Cursor (database) is empty after querying it
             contactsDBcursor.close();
@@ -165,10 +199,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getCallListCursor() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        openReadableDatabase();
 
         try {
-            return db.query(TABLE_NAME, null, null, null, null, null, null);
+            return readableDatabase.query(TABLE_NAME, null, null, null, null, null, null);
         } catch (Exception ex) {
             Log.e("Error on contact ", ex.getMessage());
         }
@@ -176,5 +210,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
 
     }
+
+    /*public String getDate(String strippedNumber) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            Cursor cursor = db.query(TABLE_NAME, new String[]{COL2}, COL1 + " = ?", new String[]{strippedNumber}, null, null, null);
+            cursor.moveToFirst();
+            return cursor.getString(cursor.getColumnIndex(COL2));
+        } catch (Exception ex) {
+            Log.e("Error on contact ", ex.getMessage());
+        }
+
+        return null;
+
+    }*/
 
 }

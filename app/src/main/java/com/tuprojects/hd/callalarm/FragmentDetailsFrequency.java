@@ -1,8 +1,12 @@
 package com.tuprojects.hd.callalarm;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.CallLog;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +20,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentDetailsFrequency extends Fragment {
 
@@ -75,7 +84,6 @@ public class FragmentDetailsFrequency extends Fragment {
                     callPerPeriod.setText(cursor.getString(cursor.getColumnIndex("calls_per_period")));
                     callFrequency.setText(cursor.getString(cursor.getColumnIndex("frequency")));
 
-                    Log.d(TAG, "The mistake is here.");
                     if (cursor.getString(cursor.getColumnIndex("period")).equals("1")) {
                         days.setChecked(true);
                     } else if (cursor.getString(cursor.getColumnIndex("period")).equals("7")) {
@@ -88,7 +96,7 @@ public class FragmentDetailsFrequency extends Fragment {
                 }
             }
             cursor.close();
-
+            contactDB.closeReadableDatabase(); //prevents memory leaks
             getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_history_container, fragmentDetailsHistory).commit();
                 //This line was causing the bottom navigation view to rise.
                 //Added android:windowSoftInputMode="adjustPan" to manifest and android:imeOptions="actionDone" to EditText to fix this.
@@ -203,7 +211,19 @@ public class FragmentDetailsFrequency extends Fragment {
                     }
 
                     //Add contact to database
-                    boolean insertData = contactDB.addData(strippedContactNumber, cpp, freq, per, name);
+                    List<CallLogData> callDetails = getCallDetails();
+
+                    boolean insertData;
+                    try {
+                        String date = callDetails.get(0).getDate();
+                        int duration = callDetails.get(0).getDurationInSeconds();
+                        insertData = contactDB.addData(strippedContactNumber, date, duration, cpp, freq, per, name);
+                        Log.d(TAG, "Data/Duration Insert");
+                    } catch (IndexOutOfBoundsException e) {
+                        insertData = contactDB.addData(strippedContactNumber, cpp, freq, per, name);
+                        Log.d(TAG, "No History Insert");
+                    }
+
                     if (insertData) {
                         Log.d(TAG, "Successfully inserted data.");
                         Toast.makeText(getContext(), "Successfully added "+name+" to database!", Toast.LENGTH_SHORT).show();
@@ -231,6 +251,68 @@ public class FragmentDetailsFrequency extends Fragment {
         });
 
         return rootView;
+    }
+
+    private List<CallLogData> getCallDetails() {
+        List<CallLogData> callDetails = new ArrayList<>();
+        //Because this check is required, it may be redundant to check for this in the onClickListener in ActivityMain
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CALL_LOG)) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+            }
+        } else {
+            Cursor cursorCallDetails = getContext().getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, null);
+            cursorCallDetails.moveToPosition(-1);//Ensures that entire call log is traversed
+            int numberIndex = cursorCallDetails.getColumnIndex(CallLog.Calls.NUMBER);
+            int callTypeIndex = cursorCallDetails.getColumnIndex(CallLog.Calls.TYPE);
+            int callDurationIndex = cursorCallDetails.getColumnIndex(CallLog.Calls.DURATION); //Returns Duration in seconds
+
+            int date = cursorCallDetails.getColumnIndex(CallLog.Calls.DATE);
+            while (cursorCallDetails.moveToNext()) {
+
+                //Initializations
+                String name = cursorCallDetails.getString(cursorCallDetails.getColumnIndex(CallLog.Calls.CACHED_NAME));
+
+                String number = cursorCallDetails.getString(numberIndex);
+                String callType = cursorCallDetails.getString(callTypeIndex);
+                String callDate = cursorCallDetails.getString(date);
+                String callDuration = cursorCallDetails.getString(callDurationIndex);
+
+                //Call Type Formatting
+                String callTypeString = null;
+                int callTypeCode = Integer.parseInt(callType);
+                switch (callTypeCode) {
+                    case CallLog.Calls.INCOMING_TYPE:
+                        callTypeString = "Incoming (Received)";
+                        break;
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        callTypeString = "Outgoing";
+                        break;
+                    case CallLog.Calls.MISSED_TYPE:
+                        callTypeString = "Incoming (Missed)";
+                        break;
+                    case CallLog.Calls.REJECTED_TYPE:
+                        callTypeString = "Incoming (Rejected)";
+                        break;
+                    case CallLog.Calls.BLOCKED_TYPE:
+                        callTypeString = "Incoming (Blocked)";
+                        break;
+                }
+
+                CallLogData callLogData = new CallLogData(name, number, callTypeString, callDate, callDuration);
+
+                //before adding, check the number against the contact and only add if the number is present there
+                if (callLogData.getStrippedNumber().equals(strippedContactNumber)) {
+                    callDetails.add(callLogData);
+                }
+            }
+            cursorCallDetails.close();
+            List<CallLogData> callDetailsReversed = Lists.reverse(callDetails);
+            return callDetailsReversed;
+        }
+        return callDetails;
     }
 
 }
