@@ -17,5 +17,8 @@
     <string name="period_Month">Month(s)</string>
     <string name="period_Quarter">Quarter(s)</string>
 
+    <string name="text_calls_per_period">0 Times</string>
+    <string name="text_frequency">N/A</string>
+
 
 </resources>

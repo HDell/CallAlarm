@@ -60,7 +60,7 @@ public class FragmentContacts extends Fragment {
             Log.e("Error on contact ", ex.getMessage());
         }
 
-        if (cursorAndroidContacts.getCount()>0) {
+        if (cursorAndroidContacts.getCount() > 0) {
 
             while (cursorAndroidContacts.moveToNext()) { //looks at each row of android contacts in cursor at a time
 

@@ -19,6 +19,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.collect.Lists;
@@ -30,15 +31,20 @@ public class FragmentDetailsFrequency extends Fragment {
 
     public static final String TAG = "DetailsFreqFragment";
 
+    //Declarations
     DatabaseHelper contactDB;
 
     String name;
     String strippedContactNumber;
     ConstraintLayout parentLayout;
     CheckBox checkBox;
+    boolean removed = false;
 
     EditText callPerPeriod;
     EditText callFrequency;
+
+    TextView cppText;
+    TextView freqText;
 
     RadioGroup callPeriods;
     RadioButton days;
@@ -53,6 +59,7 @@ public class FragmentDetailsFrequency extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.details_frequency_fragment, container, false);
 
+        //Initializations
         parentLayout = rootView.findViewById(R.id.details_frequency_layout);
 
         contactDB = new DatabaseHelper(getContext()); //have this interface w/ CallListContact instead of database in the future
@@ -73,6 +80,9 @@ public class FragmentDetailsFrequency extends Fragment {
         months = parentLayout.findViewById(R.id.period_month);
         quarters = parentLayout.findViewById(R.id.period_quarter);
 
+        cppText = parentLayout.findViewById(R.id.text_calls_per_period);
+        freqText = parentLayout.findViewById(R.id.text_frequency);
+
         //Check if contact is in database
         if(contactDB.hasContact(strippedContactNumber)){
             //Set the box to checked if the contact is in db
@@ -81,8 +91,13 @@ public class FragmentDetailsFrequency extends Fragment {
             Cursor cursor = contactDB.getCallListCursor();
             while(cursor.moveToNext()) {
                 if (cursor.getString(cursor.getColumnIndex("stripped_phone_number")).equals(strippedContactNumber)) {
-                    callPerPeriod.setText(cursor.getString(cursor.getColumnIndex("calls_per_period")));
-                    callFrequency.setText(cursor.getString(cursor.getColumnIndex("frequency")));
+                    cpp = Integer.parseInt(cursor.getString(cursor.getColumnIndex("calls_per_period")));
+                    callPerPeriod.setText(""+cpp);
+                    setCallsPerPeriodText();
+
+                    freq = Integer.parseInt(cursor.getString(cursor.getColumnIndex("frequency")));
+                    callFrequency.setText(""+freq);
+                    setCallFrequencyText();
 
                     if (cursor.getString(cursor.getColumnIndex("period")).equals("1")) {
                         days.setChecked(true);
@@ -103,8 +118,65 @@ public class FragmentDetailsFrequency extends Fragment {
         } else {
             //Set the box to unchecked if the contact isn't in db
             checkBox.setChecked(false);
+            removed = true;
+
         }
 
+        //Listen for changes to EditText
+            //Calls Per Period
+        callPerPeriod.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                try {
+                    cpp = Integer.parseInt(s.toString());
+                } catch (NumberFormatException e) {
+                    if (removed) {
+                        cpp = 0;
+                    } else {
+                        cpp = 1; //Default is 1
+                    }
+                }
+
+                setCallsPerPeriodText();
+
+                Log.d(TAG, "New CPP: "+cpp);
+                boolean updated = contactDB.updateCallsPerPeriod(cpp, strippedContactNumber);
+                if(updated) {
+                    Log.d(TAG, "CPP successfully changed.");
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+            //Frequency
+        callFrequency.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                try {
+                    freq = Integer.parseInt(s.toString());
+                } catch (NumberFormatException e) {
+                    if (removed) {
+                        freq = 0;
+                    } else {
+                        freq = 1; //Default is 1
+                    }
+                }
+
+                setCallFrequencyText();
+
+                Log.d(TAG, "New Freq: " + freq);
+                boolean updated = contactDB.updateFrequency(freq, strippedContactNumber);
+                if(updated) {
+                    Log.d(TAG, "Freq successfully changed.");
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
 
         //Listen for changes to Period
         callPeriods.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -142,54 +214,13 @@ public class FragmentDetailsFrequency extends Fragment {
             }
         });
 
-        //Listen for changes to EditText
-        callPerPeriod.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-                try {
-                    cpp = Integer.parseInt(s.toString());
-                } catch (NumberFormatException e) {
-                    cpp = 0;
-                }
-                Log.d(TAG, "New CPP: "+cpp);
-                boolean updated = contactDB.updateCallsPerPeriod(cpp, strippedContactNumber);
-                if(updated) {
-                    Log.d(TAG, "CPP successfully changed.");
-                }
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
-        callFrequency.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-                try {
-                    freq = Integer.parseInt(s.toString());
-                } catch (NumberFormatException e) {
-                    freq = 0;
-                }
-                Log.d(TAG, "New Freq: " + freq);
-                boolean updated = contactDB.updateFrequency(freq, strippedContactNumber);
-                if(updated) {
-                    Log.d(TAG, "Freq successfully changed.");
-                }
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-        });
-
         //Listen for changes to Checkbox
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
                     //Set Default Settings if Null
-                    if (callPerPeriod.getText().toString().equals("")) {
+                    if (callPerPeriod.getText().toString().equals("")||callPerPeriod.getText().toString().equals("0")) {
                         callPerPeriod.setText("1");
                         cpp = 1;
                     } else {
@@ -197,7 +228,7 @@ public class FragmentDetailsFrequency extends Fragment {
                         Log.d(TAG, "CPP: "+cpp);
                     }
 
-                    if (callFrequency.getText().toString().equals("")) {
+                    if (callFrequency.getText().toString().equals("")||callFrequency.getText().toString().equals("0")) {
                         callFrequency.setText("1");
                         freq = 1;
                     } else {
@@ -225,6 +256,7 @@ public class FragmentDetailsFrequency extends Fragment {
                     }
 
                     if (insertData) {
+                        removed = false;
                         Log.d(TAG, "Successfully inserted data.");
                         Toast.makeText(getContext(), "Successfully added "+name+" to database!", Toast.LENGTH_SHORT).show();
                         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_history_container, fragmentDetailsHistory).commit();
@@ -236,6 +268,9 @@ public class FragmentDetailsFrequency extends Fragment {
                     //Remove contact from database
                     boolean removeData = contactDB.removeData(strippedContactNumber);
                     if (removeData) {
+                        removed = true;
+                        cpp = 0;
+                        freq = 0;
                         callPerPeriod.getText().clear();
                         callFrequency.getText().clear();
                         callPeriods.clearCheck();
@@ -313,6 +348,28 @@ public class FragmentDetailsFrequency extends Fragment {
             return callDetailsReversed;
         }
         return callDetails;
+    }
+
+    private void setCallsPerPeriodText() {
+        if(cpp==1){
+            cppText.setText("Once");
+        } else if(cpp==2) {
+            cppText.setText("Twice");
+        } else {
+            cppText.setText(cpp+" Times");
+        }
+    }
+
+    private void setCallFrequencyText() {
+        if(freq==1){
+            freqText.setText("Every");
+        } else if(freq==2) {
+            freqText.setText("Every Other");
+        } else if (freq==0) {
+            freqText.setText("N/A");
+        } else {
+            freqText.setText("Every "+freq);
+        }
     }
 
 }
