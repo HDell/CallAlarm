@@ -24,7 +24,10 @@ import android.widget.Toast;
 
 import com.google.common.collect.Lists;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class FragmentDetailsFrequency extends Fragment {
@@ -53,6 +56,9 @@ public class FragmentDetailsFrequency extends Fragment {
     RadioButton quarters;
 
     int cpp, freq, per, interval;
+
+    String lastCallDate;
+    String nextCallDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,14 +106,23 @@ public class FragmentDetailsFrequency extends Fragment {
                     setCallFrequencyText();
 
                     if (cursor.getString(cursor.getColumnIndex("period")).equals("1")) {
+                        per = 1;
                         days.setChecked(true);
                     } else if (cursor.getString(cursor.getColumnIndex("period")).equals("7")) {
+                        per = 7;
                         weeks.setChecked(true);
                     } else if (cursor.getString(cursor.getColumnIndex("period")).equals("30")) {
+                        per = 30;
                         months.setChecked(true);
                     } else if (cursor.getString(cursor.getColumnIndex("period")).equals("90")) {
+                        per = 90;
                         quarters.setChecked(true);
                     }
+
+                    lastCallDate = cursor.getString(cursor.getColumnIndex("last_call_datetime"));
+                    nextCallDate = cursor.getString(cursor.getColumnIndex("next_call_datetime"));
+                    Log.d(TAG, "In DB, Last Call DateTime: "+lastCallDate);
+                    Log.d(TAG, "In DB, Next Call DateTime: "+nextCallDate);
                 }
             }
             cursor.close();
@@ -138,6 +153,9 @@ public class FragmentDetailsFrequency extends Fragment {
                 }
 
                 setCallsPerPeriodText();
+                if (lastCallDate!=null) {
+                    updateInterval();
+                }
 
                 Log.d(TAG, "New CPP: "+cpp);
                 boolean updated = contactDB.updateCallsPerPeriod(cpp, strippedContactNumber);
@@ -165,6 +183,9 @@ public class FragmentDetailsFrequency extends Fragment {
                 }
 
                 setCallFrequencyText();
+                if (lastCallDate!=null) {
+                    updateInterval();
+                }
 
                 Log.d(TAG, "New Freq: " + freq);
                 boolean updated = contactDB.updateFrequency(freq, strippedContactNumber);
@@ -208,6 +229,9 @@ public class FragmentDetailsFrequency extends Fragment {
                     boolean updated = contactDB.updatePeriod(per, strippedContactNumber);
                     if(updated) {
                         Log.d(TAG, "Period successfully changed.");
+                        if (lastCallDate!=null) {
+                            updateInterval();
+                        }
                     }
 
                 }
@@ -246,16 +270,20 @@ public class FragmentDetailsFrequency extends Fragment {
 
                     boolean insertData;
                     try {
-                        String date = callDetails.get(0).getDate();
+                        lastCallDate = callDetails.get(0).getDate();
+                        Log.d(TAG, "Last Call Log - Date: "+lastCallDate);
                         int duration = callDetails.get(0).getDurationInSeconds();
-                        insertData = contactDB.addData(strippedContactNumber, date, duration, cpp, freq, per, name);
+                        insertData = contactDB.addData(strippedContactNumber, lastCallDate, duration, cpp, freq, per, name);
                         Log.d(TAG, "Data/Duration Insert");
                     } catch (IndexOutOfBoundsException e) {
-                        insertData = contactDB.addData(strippedContactNumber, cpp, freq, per, name);
+                        lastCallDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(Calendar.getInstance().getTime());
+                        Log.d(TAG, "No Call Log - Date: "+lastCallDate);
+                        insertData = contactDB.addData(strippedContactNumber, lastCallDate, 0, cpp, freq, per, name);
                         Log.d(TAG, "No History Insert");
                     }
 
                     if (insertData) {
+                        updateInterval(); //Won't be called until lastCallDate is set.
                         removed = false;
                         Log.d(TAG, "Successfully inserted data.");
                         Toast.makeText(getContext(), "Successfully added "+name+" to database!", Toast.LENGTH_SHORT).show();
@@ -269,6 +297,7 @@ public class FragmentDetailsFrequency extends Fragment {
                     boolean removeData = contactDB.removeData(strippedContactNumber);
                     if (removeData) {
                         removed = true;
+                        lastCallDate = null;
                         cpp = 0;
                         freq = 0;
                         callPerPeriod.getText().clear();
@@ -369,6 +398,32 @@ public class FragmentDetailsFrequency extends Fragment {
             freqText.setText("N/A");
         } else {
             freqText.setText("Every "+freq);
+        }
+    }
+
+    private void updateInterval() {
+        if(cpp==0) {
+            //contactDB.updateInterval(0,"", strippedContactNumber);
+            Toast.makeText(getContext(), "Calls Per Period must be greater than 0!", Toast.LENGTH_SHORT).show();
+        } else {
+            interval = ((per * 24) * freq) / cpp;
+
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new SimpleDateFormat("MM-dd-yy hh:mm a").parse(lastCallDate)); //Sets cal to time of 'last' call
+                calendar.add(Calendar.HOUR_OF_DAY, interval); //Adds the interval to the calendar for the dateTime of next call
+                nextCallDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(calendar.getTime());
+                boolean updatedInterval = contactDB.updateInterval(interval, nextCallDate, strippedContactNumber);
+                if (updatedInterval) {
+                    Log.d(TAG, "Interval Updated to: "+interval);
+                    Log.d(TAG, "New Call Reminder DateTime: "+nextCallDate);
+                } else {
+                    Log.d(TAG, "Something went wrong!");
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

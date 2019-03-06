@@ -42,39 +42,6 @@ public class FragmentHistory extends Fragment {
         //layoutManager = new LinearLayoutManager(this); //this assumes that we're creating directly from Activity
         //recyclerView.setLayoutManager(layoutManager || RecyclerView.LayoutManager);
 
-        //My test data
-        List<String> testDataNames = new ArrayList<>();
-        testDataNames.add("Mom");
-        testDataNames.add("Ashley");
-        testDataNames.add("Ashley");
-        testDataNames.add("Mom");
-        testDataNames.add("Ashley");
-        testDataNames.add("Ashley");
-        testDataNames.add("Mom");
-        testDataNames.add("Dad");
-        testDataNames.add("Ashley");
-        testDataNames.add("Mom");
-        testDataNames.add("Dad");
-        testDataNames.add("Dad");
-
-        List<String> testDataDetails = new ArrayList<>();
-        testDataDetails.add("Incoming (missed), Yesterday, 4:32 PM");
-        testDataDetails.add("Incoming (received), Yesterday, 12:16 PM");
-        testDataDetails.add("Incoming (missed), Yesterday, 12:08 PM");
-        testDataDetails.add("Incoming (received), 2 days ago, 3:32 PM");
-        testDataDetails.add("Incoming (received), 3 days ago, 4:32 PM");
-        testDataDetails.add("Incoming (received), 4 days ago, 5:32 PM");
-        testDataDetails.add("Incoming (received), 5 days ago, 6:32 PM");
-        testDataDetails.add("Incoming (received), 6 days ago, 7:32 PM");
-        testDataDetails.add("Incoming (received), October 30, 8:32 AM");
-        testDataDetails.add("Incoming (received), October 29, 9:32 AM");
-        testDataDetails.add("Incoming (received), October 28, 12:32 PM");
-        testDataDetails.add("Incoming (missed), October 28, 10:32 AM");
-
-        List<List<String>> testData = new ArrayList<>();
-        testData.add(testDataNames);
-        testData.add(testDataDetails);
-
         // 3. create an adapter
         DatabaseHelper db = new DatabaseHelper(getContext());
         AdapterHistory adapter = new AdapterHistory(getContext(), getCallDetails(db.getCallListCursor()));
