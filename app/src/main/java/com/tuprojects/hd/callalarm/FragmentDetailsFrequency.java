@@ -55,7 +55,7 @@ public class FragmentDetailsFrequency extends Fragment {
     RadioButton months;
     RadioButton quarters;
 
-    int cpp, freq, per, interval;
+    int cpp, freq, per, interval, minutesRemainding;
 
     String lastCallDate;
     String nextCallDate;
@@ -407,15 +407,18 @@ public class FragmentDetailsFrequency extends Fragment {
             Toast.makeText(getContext(), "Calls Per Period must be greater than 0!", Toast.LENGTH_SHORT).show();
         } else {
             interval = ((per * 24) * freq) / cpp;
+            minutesRemainding = (((per * 24 * 60) * freq) / cpp) % 60;
 
             try {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new SimpleDateFormat("MM-dd-yy hh:mm a").parse(lastCallDate)); //Sets cal to time of 'last' call
                 calendar.add(Calendar.HOUR_OF_DAY, interval); //Adds the interval to the calendar for the dateTime of next call
+                calendar.add(Calendar.MINUTE, minutesRemainding);
                 nextCallDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(calendar.getTime());
                 boolean updatedInterval = contactDB.updateInterval(interval, nextCallDate, strippedContactNumber);
                 if (updatedInterval) {
                     Log.d(TAG, "Interval Updated to: "+interval);
+                    Log.d(TAG, "Remainder: "+minutesRemainding);
                     Log.d(TAG, "New Call Reminder DateTime: "+nextCallDate);
                 } else {
                     Log.d(TAG, "Something went wrong!");
