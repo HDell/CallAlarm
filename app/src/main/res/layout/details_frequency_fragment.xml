@@ -110,4 +110,17 @@
             tools:layout_editor_absoluteY="545dp" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/text_next_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_next_call_date"
+        android:layout_marginTop="10dp"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/text_frequency"
+        app:layout_constraintRight_toRightOf="@id/text_frequency"
+        app:layout_constraintLeft_toLeftOf="@id/text_calls_per_period"
+        tools:layout_editor_absoluteX="163dp"
+        tools:layout_editor_absoluteY="76dp" />
+
 </android.support.constraint.ConstraintLayout>

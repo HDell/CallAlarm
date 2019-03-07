@@ -43,8 +43,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL5 = "frequency"; //integer
     private static final String COL6 = "period"; //integer [1=day, 7=week, 30=month, 90=quarter]
     private static final String COL7 = "name"; //string
-    private static final String COL8 = "interval"; //integer
-    private static final String COL9 = "next_call_datetime"; //integer
+    private static final String COL8 = "intervalHr"; //integer
+    private static final String COL9 = "intervalMin"; //integer
+    private static final String COL10 = "next_call_datetime"; //date
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -63,7 +64,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL6 + " INTEGER, "
                 + COL7 + " TEXT, "
                 + COL8 + " INTEGER, "
-                + COL9 + " DATE);";
+                + COL9 + " INTEGER, "
+                + COL10 + " DATE);";
         db.execSQL(createTable);
     }
 
@@ -172,11 +174,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean updateInterval(int interval, String nextCallDate, String strippedNumber) {
+    public boolean updateInterval(int intervalHr, int intervalMin, String nextCallDate, String strippedNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL8, interval);
-        contentValues.put(COL9, nextCallDate);
+        contentValues.put(COL8, intervalHr);
+        contentValues.put(COL9, intervalMin);
+        contentValues.put(COL10, nextCallDate);
 
         long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
 

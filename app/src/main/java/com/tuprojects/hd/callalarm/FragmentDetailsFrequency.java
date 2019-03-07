@@ -48,6 +48,7 @@ public class FragmentDetailsFrequency extends Fragment {
 
     TextView cppText;
     TextView freqText;
+    TextView nextCallText;
 
     RadioGroup callPeriods;
     RadioButton days;
@@ -55,7 +56,7 @@ public class FragmentDetailsFrequency extends Fragment {
     RadioButton months;
     RadioButton quarters;
 
-    int cpp, freq, per, interval, minutesRemainding;
+    int cpp, freq, per, intervalHr, intervalMin;
 
     String lastCallDate;
     String nextCallDate;
@@ -88,6 +89,8 @@ public class FragmentDetailsFrequency extends Fragment {
 
         cppText = parentLayout.findViewById(R.id.text_calls_per_period);
         freqText = parentLayout.findViewById(R.id.text_frequency);
+        nextCallText = parentLayout.findViewById(R.id.text_next_call);
+
 
         //Check if contact is in database
         if(contactDB.hasContact(strippedContactNumber)){
@@ -123,6 +126,7 @@ public class FragmentDetailsFrequency extends Fragment {
                     nextCallDate = cursor.getString(cursor.getColumnIndex("next_call_datetime"));
                     Log.d(TAG, "In DB, Last Call DateTime: "+lastCallDate);
                     Log.d(TAG, "In DB, Next Call DateTime: "+nextCallDate);
+                    nextCallText.setText("Reminder: "+nextCallDate);
                 }
             }
             cursor.close();
@@ -303,6 +307,7 @@ public class FragmentDetailsFrequency extends Fragment {
                         callPerPeriod.getText().clear();
                         callFrequency.getText().clear();
                         callPeriods.clearCheck();
+                        nextCallText.setText("Reminder: Not Scheduled");
                         Log.d(TAG, "Successfully removed data.");
                         Toast.makeText(getContext(), "Successfully removed "+name+" from database!", Toast.LENGTH_SHORT).show();
                         getActivity().getSupportFragmentManager().beginTransaction().remove(fragmentDetailsHistory).commit();
@@ -406,20 +411,28 @@ public class FragmentDetailsFrequency extends Fragment {
             //contactDB.updateInterval(0,"", strippedContactNumber);
             Toast.makeText(getContext(), "Calls Per Period must be greater than 0!", Toast.LENGTH_SHORT).show();
         } else {
-            interval = ((per * 24) * freq) / cpp;
-            minutesRemainding = (((per * 24 * 60) * freq) / cpp) % 60;
+            intervalHr = ((per * 24) * freq) / cpp;
+            intervalMin = (((per * 24 * 60) * freq) / cpp) % 60;
 
             try {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new SimpleDateFormat("MM-dd-yy hh:mm a").parse(lastCallDate)); //Sets cal to time of 'last' call
-                calendar.add(Calendar.HOUR_OF_DAY, interval); //Adds the interval to the calendar for the dateTime of next call
-                calendar.add(Calendar.MINUTE, minutesRemainding);
-                nextCallDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(calendar.getTime());
-                boolean updatedInterval = contactDB.updateInterval(interval, nextCallDate, strippedContactNumber);
+                calendar.add(Calendar.HOUR_OF_DAY, intervalHr); //Adds the intervalHr to the calendar for the dateTime of next call
+                calendar.add(Calendar.MINUTE, intervalMin);
+                if (!calendar.before(Calendar.getInstance())) {
+                    nextCallDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(calendar.getTime());
+                } else {
+                    calendar = Calendar.getInstance();
+                    calendar.add(Calendar.HOUR_OF_DAY, intervalHr); //Adds the intervalHr to the calendar for the dateTime of next call
+                    calendar.add(Calendar.MINUTE, intervalMin);
+                    nextCallDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(calendar.getTime());
+                }
+                boolean updatedInterval = contactDB.updateInterval(intervalHr, intervalMin, nextCallDate, strippedContactNumber);
                 if (updatedInterval) {
-                    Log.d(TAG, "Interval Updated to: "+interval);
-                    Log.d(TAG, "Remainder: "+minutesRemainding);
+                    Log.d(TAG, "Interval Hr Updated to: "+intervalHr);
+                    Log.d(TAG, "Interval Min Updated to: "+intervalMin);
                     Log.d(TAG, "New Call Reminder DateTime: "+nextCallDate);
+                    nextCallText.setText("Reminder: "+nextCallDate);
                 } else {
                     Log.d(TAG, "Something went wrong!");
                 }
