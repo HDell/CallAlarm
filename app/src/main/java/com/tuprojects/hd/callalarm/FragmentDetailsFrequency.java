@@ -447,45 +447,62 @@ public class FragmentDetailsFrequency extends Fragment {
     }
 
     private void updateFrequencyDisplayText() {
+        
+        String cppString;
+        
+        if (cpp==1||cpp==2) {
+            cppString = cppText.getText().toString();
+        } else {
+            cppString = cppText.getText().toString().toLowerCase();
+        }
+        
         if (days.isChecked()) {
             if (freq==1||freq==2) {
                 if (freq==1&&cpp==1) {
                     frequencyDisplay = "Daily";
+                } else if (freq==1) {
+                    frequencyDisplay = cppString + " a day";
                 } else {
-                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Day";
+                    frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " day";
                 }
             } else {
-                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Days";
+                frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " days";
             }
         } else if (weeks.isChecked()) {
             if (freq==1||freq==2) {
                 if (freq==1&&cpp==1) {
                     frequencyDisplay = "Weekly";
+                } else if (freq==1) {
+                    frequencyDisplay = cppString + " a week";
                 } else {
-                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Week";
+                    frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " week";
                 }
             } else {
-                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Weeks";
+                frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " weeks";
             }
         } else if (months.isChecked()) {
             if (freq==1||freq==2) {
                 if (freq==1&&cpp==1) {
                     frequencyDisplay = "Monthly";
+                } else if (freq==1) {
+                    frequencyDisplay = cppString + " a month";
                 } else {
-                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Month";
+                    frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " month";
                 }
             } else {
-                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Months";
+                frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " months";
             }
         } else if (quarters.isChecked()) {
             if (freq==1||freq==2) {
                 if (freq==1&&cpp==1) {
                     frequencyDisplay = "Quarterly";
+                } else if (freq==1) {
+                    frequencyDisplay = cppString + " a quarter";
                 } else {
-                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Quarter";
+                    frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " quarter";
                 }
             } else {
-                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Quarters";
+                frequencyDisplay = cppString + " " + freqText.getText().toString().toLowerCase() + " quarters";
             }
         }
         boolean updatedFreqDisp = contactDB.updateFrequencyDisplay(frequencyDisplay, strippedContactNumber);
