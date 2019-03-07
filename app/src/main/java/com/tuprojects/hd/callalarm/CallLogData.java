@@ -63,6 +63,10 @@ public class CallLogData {
         }
     }
 
+    public void setName(String name) {
+         this.name = name;
+    }
+
     public String getName() {
         return name;
     }

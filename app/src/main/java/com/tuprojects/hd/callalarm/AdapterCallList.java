@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -75,7 +76,10 @@ public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHo
         //Log.d(TAG, ""+dataset.get(position).getCallLogData());
 
         String name = androidContact.getName();
-        //String frequency = dataset.get(position).getCallLogData().get(0).getDuration();
+        DatabaseHelper db = new DatabaseHelper(context);
+        String frequency = db.getFrequencyDisplay(androidContact.getStrippedPhoneNum(0));
+        db.closeReadableDatabase();
+        db.close(); //is this close necessary?
         String history = "";
         try {
             history = dataset.get(position).getCallLogData().get(0).getDate() + ", " + dataset.get(position).getCallLogData().get(0).getDuration();
@@ -84,16 +88,22 @@ public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHo
         }
 
         holder.nameTextView.setText(name);
-        //holder.frequencyTextView.setText(frequency);
+        holder.frequencyTextView.setText(frequency);
         holder.historyTextView.setText(history);
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ActivityDetails.class);
+                DatabaseHelper db = new DatabaseHelper(context);
+                String strippedNumber = androidContact.getStrippedPhoneNum(0);
+                String contactNumber  = db.getContactNumber(strippedNumber); //Use DB to get number on details screen aligned
+                db.closeReadableDatabase();
+                db.close();
+
                 intent.putExtra("contactName", androidContact.getName());
-                intent.putExtra("strippedContactNumber", androidContact.getStrippedPhoneNum(0));
-                intent.putExtra("contactNumber", androidContact.getPhoneNum(0));
+                intent.putExtra("strippedContactNumber", strippedNumber);
+                intent.putExtra("contactNumber", contactNumber);
                 context.startActivity(intent);
             }
         });

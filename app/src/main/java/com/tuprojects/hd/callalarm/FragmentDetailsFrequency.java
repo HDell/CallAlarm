@@ -37,8 +37,7 @@ public class FragmentDetailsFrequency extends Fragment {
     //Declarations
     DatabaseHelper contactDB;
 
-    String name;
-    String strippedContactNumber;
+    String name, strippedContactNumber, contactNumber;
     ConstraintLayout parentLayout;
     CheckBox checkBox;
     boolean removed = false;
@@ -58,8 +57,7 @@ public class FragmentDetailsFrequency extends Fragment {
 
     int cpp, freq, per, intervalHr, intervalMin;
 
-    String lastCallDate;
-    String nextCallDate;
+    String lastCallDate, nextCallDate, frequencyDisplay;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +73,7 @@ public class FragmentDetailsFrequency extends Fragment {
 
         name = getActivity().getIntent().getStringExtra("contactName");
         strippedContactNumber = getActivity().getIntent().getStringExtra("strippedContactNumber");
+        contactNumber = getActivity().getIntent().getStringExtra("contactNumber");
 
         checkBox = parentLayout.findViewById(R.id.details_contacts_toggle);
 
@@ -157,8 +156,9 @@ public class FragmentDetailsFrequency extends Fragment {
                 }
 
                 setCallsPerPeriodText();
-                if (lastCallDate!=null) {
+                if (lastCallDate!=null) { //is a check against removed preferable?
                     updateInterval();
+                    updateFrequencyDisplayText();
                 }
 
                 Log.d(TAG, "New CPP: "+cpp);
@@ -187,8 +187,9 @@ public class FragmentDetailsFrequency extends Fragment {
                 }
 
                 setCallFrequencyText();
-                if (lastCallDate!=null) {
+                if (lastCallDate!=null) { //is a check against removed preferable?
                     updateInterval();
+                    updateFrequencyDisplayText();
                 }
 
                 Log.d(TAG, "New Freq: " + freq);
@@ -235,6 +236,7 @@ public class FragmentDetailsFrequency extends Fragment {
                         Log.d(TAG, "Period successfully changed.");
                         if (lastCallDate!=null) {
                             updateInterval();
+                            updateFrequencyDisplayText();
                         }
                     }
 
@@ -277,17 +279,18 @@ public class FragmentDetailsFrequency extends Fragment {
                         lastCallDate = callDetails.get(0).getDate();
                         Log.d(TAG, "Last Call Log - Date: "+lastCallDate);
                         int duration = callDetails.get(0).getDurationInSeconds();
-                        insertData = contactDB.addData(strippedContactNumber, lastCallDate, duration, cpp, freq, per, name);
+                        insertData = contactDB.addData(strippedContactNumber, contactNumber, lastCallDate, duration, cpp, freq, per, name);
                         Log.d(TAG, "Data/Duration Insert");
                     } catch (IndexOutOfBoundsException e) {
                         lastCallDate = new SimpleDateFormat("MM-dd-yy hh:mm a").format(Calendar.getInstance().getTime());
                         Log.d(TAG, "No Call Log - Date: "+lastCallDate);
-                        insertData = contactDB.addData(strippedContactNumber, lastCallDate, 0, cpp, freq, per, name);
+                        insertData = contactDB.addData(strippedContactNumber, contactNumber, lastCallDate, 0, cpp, freq, per, name);
                         Log.d(TAG, "No History Insert");
                     }
 
                     if (insertData) {
                         updateInterval(); //Won't be called until lastCallDate is set.
+                        updateFrequencyDisplayText();
                         removed = false;
                         Log.d(TAG, "Successfully inserted data.");
                         Toast.makeText(getContext(), "Successfully added "+name+" to database!", Toast.LENGTH_SHORT).show();
@@ -440,6 +443,54 @@ public class FragmentDetailsFrequency extends Fragment {
                 e.printStackTrace();
                 Toast.makeText(getContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void updateFrequencyDisplayText() {
+        if (days.isChecked()) {
+            if (freq==1||freq==2) {
+                if (freq==1&&cpp==1) {
+                    frequencyDisplay = "Daily";
+                } else {
+                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Day";
+                }
+            } else {
+                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Days";
+            }
+        } else if (weeks.isChecked()) {
+            if (freq==1||freq==2) {
+                if (freq==1&&cpp==1) {
+                    frequencyDisplay = "Weekly";
+                } else {
+                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Week";
+                }
+            } else {
+                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Weeks";
+            }
+        } else if (months.isChecked()) {
+            if (freq==1||freq==2) {
+                if (freq==1&&cpp==1) {
+                    frequencyDisplay = "Monthly";
+                } else {
+                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Month";
+                }
+            } else {
+                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Months";
+            }
+        } else if (quarters.isChecked()) {
+            if (freq==1||freq==2) {
+                if (freq==1&&cpp==1) {
+                    frequencyDisplay = "Quarterly";
+                } else {
+                    frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Quarter";
+                }
+            } else {
+                frequencyDisplay = cppText.getText().toString() + " " + freqText.getText() + " Quarters";
+            }
+        }
+        boolean updatedFreqDisp = contactDB.updateFrequencyDisplay(frequencyDisplay, strippedContactNumber);
+        if (updatedFreqDisp) {
+            Log.d(TAG, "Updated FreqDisp to: "+frequencyDisplay);
         }
     }
 

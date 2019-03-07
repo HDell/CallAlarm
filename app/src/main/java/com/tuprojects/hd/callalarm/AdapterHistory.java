@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -64,7 +65,16 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
         final CallLogData callLogData = dataset.get(position);
 
             //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();
+        if (callLogData.getName().equals(callLogData.getNumber())) {
+            DatabaseHelper db = new DatabaseHelper(context);
+            callLogData.setName(db.getContactName(callLogData.getStrippedNumber()));
+            //Log.d(TAG, "Updated name from "+callLogData.getName()); //This works!
+            db.closeReadableDatabase();
+            db.close();
+        }
+
         holder.nameTextView.setText(callLogData.getName());
+
 
         String details = callLogData.getType()+", "+callLogData.getDate();
         holder.detailsTextView.setText(details);
@@ -74,9 +84,15 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViewHold
             public void onClick(View v) {
                 Log.d(TAG, "Successfully added Contact from Call Log List.");
                 Intent intent = new Intent(context, ActivityDetails.class);
+                DatabaseHelper db = new DatabaseHelper(context);
+                String strippedNumber = callLogData.getStrippedNumber();
+                String contactNumber  = db.getContactNumber(strippedNumber); //Use DB to get number on details screen aligned
+                db.closeReadableDatabase();
+                db.close();
+
                 intent.putExtra("contactName", callLogData.getName());
-                intent.putExtra("strippedContactNumber", callLogData.getStrippedNumber());
-                intent.putExtra("contactNumber", callLogData.getNumber()); //think about adding an extra to signal that this is coming the history to update the number to the android contact number style
+                intent.putExtra("strippedContactNumber", strippedNumber);
+                intent.putExtra("contactNumber", contactNumber);
                 context.startActivity(intent);
             }
         });

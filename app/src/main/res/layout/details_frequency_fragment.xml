@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/details_frequency_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <CheckBox
         android:id="@+id/details_contacts_toggle"
@@ -116,7 +118,7 @@
         android:layout_height="wrap_content"
         android:text="@string/text_next_call_date"
         android:layout_marginTop="10dp"
-        android:textSize="12sp"
+        android:textSize="11sp"
         app:layout_constraintTop_toBottomOf="@id/text_frequency"
         app:layout_constraintRight_toRightOf="@id/text_frequency"
         app:layout_constraintLeft_toLeftOf="@id/text_calls_per_period"

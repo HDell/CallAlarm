@@ -37,15 +37,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String COL0 = "id"; //integer, primary key
     private static final String COL1 = "stripped_phone_number"; //string
-    private static final String COL2 = "last_call_datetime"; //date
-    private static final String COL3 = "last_call_duration"; //integer, seconds
-    private static final String COL4 = "calls_per_period"; //integer
-    private static final String COL5 = "frequency"; //integer
-    private static final String COL6 = "period"; //integer [1=day, 7=week, 30=month, 90=quarter]
-    private static final String COL7 = "name"; //string
-    private static final String COL8 = "intervalHr"; //integer
-    private static final String COL9 = "intervalMin"; //integer
-    private static final String COL10 = "next_call_datetime"; //date
+    private static final String COL2 = "unstripped_phone_number"; //string
+    private static final String COL3 = "last_call_datetime"; //date
+    private static final String COL4 = "last_call_duration"; //integer, seconds
+    private static final String COL5 = "calls_per_period"; //integer
+    private static final String COL6 = "frequency"; //integer
+    private static final String COL7 = "period"; //integer [1=day, 7=week, 30=month, 90=quarter]
+    private static final String COL8 = "name"; //string
+    private static final String COL9 = "intervalHr"; //integer
+    private static final String COL10 = "intervalMin"; //integer
+    private static final String COL11 = "next_call_datetime"; //date
+    private static final String COL12 = "frequency_display"; //text
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -57,15 +59,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COL1 + " TEXT, "
-                + COL2 + " DATE, "
-                + COL3 + " INTEGER, "
+                + COL2 + " TEXT, "
+                + COL3 + " DATE, "
                 + COL4 + " INTEGER, "
                 + COL5 + " INTEGER, "
                 + COL6 + " INTEGER, "
-                + COL7 + " TEXT, "
-                + COL8 + " INTEGER, "
+                + COL7 + " INTEGER, "
+                + COL8 + " TEXT, "
                 + COL9 + " INTEGER, "
-                + COL10 + " DATE);";
+                + COL10 + " INTEGER, "
+                + COL11 + " DATE, "
+                + COL12 + " TEXT);";
         db.execSQL(createTable);
     }
 
@@ -83,16 +87,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         readableDatabase.close();
     }
 
-    public boolean addData(String strippedNumber, String date, int duration, int cpp, int freq, int per, String name) {
+    public boolean addData(String strippedNumber, String number, String date, int duration, int cpp, int freq, int per, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, strippedNumber);
-        contentValues.put(COL2, date);
-        contentValues.put(COL3, duration);
-        contentValues.put(COL4, cpp);
-        contentValues.put(COL5, freq);
-        contentValues.put(COL6, per);
-        contentValues.put(COL7, name);
+        contentValues.put(COL2, number);
+        contentValues.put(COL3, date);
+        contentValues.put(COL4, duration);
+        contentValues.put(COL5, cpp);
+        contentValues.put(COL6, freq);
+        contentValues.put(COL7, per);
+        contentValues.put(COL8, name);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
@@ -105,31 +110,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
-    public boolean addData(String strippedNumber, int cpp, int freq, int per, String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL1, strippedNumber);
-        contentValues.put(COL4, cpp);
-        contentValues.put(COL5, freq);
-        contentValues.put(COL6, per);
-        contentValues.put(COL7, name);
-
-        long result = db.insert(TABLE_NAME, null, contentValues);
-
-        db.close();
-
-        if (result==-1) { //negatively inserted data will be result in -1
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     public boolean updateCallsPerPeriod(int newCPP, String strippedNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL4, newCPP);
+        contentValues.put(COL5, newCPP);
 
         long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
 
@@ -145,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateFrequency(int newFreq, String strippedNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL5, newFreq);
+        contentValues.put(COL6, newFreq);
 
         long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
 
@@ -161,7 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updatePeriod(int newPeriod, String strippedNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL6, newPeriod);
+        contentValues.put(COL7, newPeriod);
 
         long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
 
@@ -177,9 +161,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateInterval(int intervalHr, int intervalMin, String nextCallDate, String strippedNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL8, intervalHr);
-        contentValues.put(COL9, intervalMin);
-        contentValues.put(COL10, nextCallDate);
+        contentValues.put(COL9, intervalHr);
+        contentValues.put(COL10, intervalMin);
+        contentValues.put(COL11, nextCallDate);
+
+        long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
+
+        db.close();
+
+        if (result==-1) { //negatively updated data will be result in -1
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean updateFrequencyDisplay(String freqDisp, String strippedNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL12, freqDisp);
 
         long result = db.update(TABLE_NAME, contentValues, COL1 + " = ?", new String[]{strippedNumber});
 
@@ -235,11 +235,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    /*public String getDate(String strippedNumber) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    public String getContactNumber(String strippedNumber) {
+        openReadableDatabase();
 
         try {
-            Cursor cursor = db.query(TABLE_NAME, new String[]{COL2}, COL1 + " = ?", new String[]{strippedNumber}, null, null, null);
+            Cursor cursor = readableDatabase.query(TABLE_NAME, new String[]{COL2}, COL1 + " = ?", new String[]{strippedNumber}, null, null, null);
             cursor.moveToFirst();
             return cursor.getString(cursor.getColumnIndex(COL2));
         } catch (Exception ex) {
@@ -248,6 +248,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return null;
 
-    }*/
+    }
+
+    public String getContactName(String strippedNumber) {
+        openReadableDatabase();
+
+        try {
+            Cursor cursor = readableDatabase.query(TABLE_NAME, new String[]{COL8}, COL1 + " = ?", new String[]{strippedNumber}, null, null, null);
+            cursor.moveToFirst();
+            return cursor.getString(cursor.getColumnIndex(COL8));
+        } catch (Exception ex) {
+            Log.e("Error on contact ", ex.getMessage());
+        }
+
+        return null;
+
+    }
+
+    public String getFrequencyDisplay(String strippedNumber) {
+        openReadableDatabase();
+
+        try {
+            Cursor cursor = readableDatabase.query(TABLE_NAME, new String[]{COL12}, COL1 + " = ?", new String[]{strippedNumber}, null, null, null);
+            cursor.moveToFirst();
+            return cursor.getString(cursor.getColumnIndex(COL12));
+        } catch (Exception ex) {
+            Log.e("Error on contact ", ex.getMessage());
+        }
+
+        return null;
+
+    }
 
 }
