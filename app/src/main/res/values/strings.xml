@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Call Alarm</string>
     <string name="title_contacts">Contacts</string>
     <string name="title_call_list">Call List</string>
@@ -9,5 +10,16 @@
     <string name="call_list_frequency">Call Frequency:</string>
     <string name="call_list_history">Call History:</string>
 
+    <string name="no_call_log">No Call History Available</string>
+
+    <string name="default_details_hint">0</string>
+    <string name="period_day">Day(s)</string>
+    <string name="period_week">Week(s)</string>
+    <string name="period_Month">Month(s)</string>
+    <string name="period_Quarter">Quarter(s)</string>
+
+    <string name="text_calls_per_period">0 Times</string>
+    <string name="text_frequency">N/A</string>
+    <string name="text_next_call_date"> "Reminder: Not Scheduled"</string>
 
 </resources>

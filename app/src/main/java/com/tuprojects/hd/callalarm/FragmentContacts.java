@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsFragment extends Fragment {
+public class FragmentContacts extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -31,12 +31,9 @@ public class ContactsFragment extends Fragment {
         // 2. set layoutManger
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        // use a linear layout manager
-        //layoutManager = new LinearLayoutManager(this); //this assumes that we're creating directly from Activity
-        //recyclerView.setLayoutManager(layoutManager || RecyclerView.LayoutManager);
 
         // 3. create an adapter
-        ContactsAdapter adapter = new ContactsAdapter(getAndroidContacts());
+        AdapterContacts adapter = new AdapterContacts(getContext(), getAndroidContacts());
 
         // 4. set adapter
         recyclerView.setAdapter(adapter);
@@ -45,21 +42,6 @@ public class ContactsFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         return rootView;
-    }
-
-    //Should this be in another file? (Should the coupling be loosened?)
-    public class AndroidContact {
-        private String contactName = "";
-        private String contactPhoneNum = "";
-        private int contactID = 0;
-
-        public AndroidContact(String contactName) {
-            this.contactName = contactName;
-        }
-
-        public String getName() {
-            return contactName;
-        }
     }
 
     private List<AndroidContact> getAndroidContacts() {
@@ -78,16 +60,34 @@ public class ContactsFragment extends Fragment {
             Log.e("Error on contact ", ex.getMessage());
         }
 
-        if (cursorAndroidContacts.getCount()>0) {
+        if (cursorAndroidContacts.getCount() > 0) {
 
-            while (cursorAndroidContacts.moveToNext()) { //looks at each row of cursor
+            while (cursorAndroidContacts.moveToNext()) { //looks at each row of android contacts in cursor at a time
 
                 //Note: this is how you use the cursor to read data from a content provider
                     //cursor.getString(index) <- (w/ respect to the current line [see loop])
-                AndroidContact androidContact = new AndroidContact(cursorAndroidContacts.getString(cursorAndroidContacts.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                //String contactID = cursorAndroidContacts.getString(cursorAndroidContacts.getColumnIndex(ContactsContract.Contacts._ID));
+                AndroidContact androidContact = new AndroidContact(cursorAndroidContacts.getString(cursorAndroidContacts.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))); //name from 1 row
+                String contactID = cursorAndroidContacts.getString(cursorAndroidContacts.getColumnIndex(ContactsContract.Contacts._ID)); //ID from 1 row
+                androidContact.setContactID(Integer.parseInt(contactID));
 
-                //Handle phone number here (to-do LATER)
+                //Handle phone number here
+                int hasPhoneNumber = Integer.parseInt(cursorAndroidContacts.getString(cursorAndroidContacts.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))); //0 or less if no phone #s
+
+                if (hasPhoneNumber > 0) {
+
+                    //CommonDataKinds.Phone = table path
+                    Cursor cursorPhoneNumbers = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{contactID}, null);
+
+                    while (cursorPhoneNumbers.moveToNext()) { //looks at each row of contact's phone numbers in cursor at a time
+
+                        String phoneNumber = cursorPhoneNumbers.getString(cursorPhoneNumbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        androidContact.addPhoneNumber(phoneNumber);
+
+                    }
+
+                    cursorPhoneNumbers.close();
+
+                }
 
                 //Build AndroidContacts ArrayList
                 androidContactList.add(androidContact);

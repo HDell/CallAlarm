@@ -6,44 +6,20 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.ContentResolver;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /*
 VIEW
  */
 
-/*
-MODEL:
 
-    This class will serve as an abstraction of the contact list data that is pulled from the phone.
-    Ultimately the data will be formatted as such:
-
-    [
-        ("Call ID", "FirstName", "LastName", "Length of call", "Date of call", "Time of call", "Incoming vs. Outgoing"),
-        ("Call ID", "FirstName", "LastName", "Length of call", "Date of call", "Time of call", "Incoming vs. Outgoing"),
-        ...,
-    ]
-
-    [
-        (Consider only looking at the last x number of calls in the users call log)
-        - Look into the new Call Log Permission policy implemented by Android
-    ]
- */
-
-public class MainActivity extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity {
 
     //STATE
 
@@ -54,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     int navScreen;
 
         //Fragments
-    ContactsFragment contactsFragment = new ContactsFragment();
-    CallListFragment callListFragment = new CallListFragment();
-    HistoryFragment historyFragment = new HistoryFragment();
+    FragmentContacts fragmentContacts = new FragmentContacts();
+    FragmentCallList fragmentCallList = new FragmentCallList();
+    FragmentHistory fragmentHistory = new FragmentHistory();
 
             //Manager Set Up
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -71,44 +47,47 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_contacts: // (item.getItemId() == R.id.navigation_contacts)
 
+                    navScreen = 0;
+                    restart = false;
+
                     // Replace whatever is in the fragment_container view with this fragment,
                     // and add the transaction to the back stack
-                    fragmentTransaction.replace(R.id.fragment_container, contactsFragment).addToBackStack(null).commit();
+                    fragmentTransaction.replace(R.id.fragment_container, fragmentContacts).commit();
 
                     return true;
                 case R.id.navigation_call_list:
 
-                    navScreen = 0;
+                    navScreen = 1;
                     restart = false;
 
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_CALL_LOG)) {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+                    if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CALL_LOG)) {
+                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
                         } else {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
                         }
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
                         // and add the transaction to the back stack
-                        fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
+                        fragmentTransaction.replace(R.id.fragment_container, fragmentCallList).commit();
                     }
 
                     return true;
                 case R.id.navigation_history:
 
-                    navScreen = 1;
+                    navScreen = 2;
                     restart = false;
 
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_CALL_LOG)) {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+                    if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CALL_LOG)) {
+                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
                         } else {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
                         }
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
                         // and add the transaction to the back stack
-                        fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
+                        fragmentTransaction.replace(R.id.fragment_container, fragmentHistory).commit();
                     }
 
                     return true;
@@ -124,11 +103,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_CONTACTS)) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
+        if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CONTACTS)) {
+                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
             } else {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
+                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
             }
         } else {
             //Initializations
@@ -139,8 +118,19 @@ public class MainActivity extends AppCompatActivity {
             //View Behavior
             navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
-            //Start Fragment on Contacts
-            fragmentTransaction.add(R.id.fragment_container, contactsFragment).commit();
+            if (getIntent().getExtras() != null) {
+                navScreen = getIntent().getExtras().getInt("navScreen");
+                if (navScreen == 0) {
+                    navigation.setSelectedItemId(R.id.navigation_contacts);
+                } else if (navScreen == 1) {
+                    navigation.setSelectedItemId(R.id.navigation_call_list);
+                } else { //navScreen == 2
+                    navigation.setSelectedItemId(R.id.navigation_history);
+                }
+            } else {
+                //Start Fragment on Contacts Screen (as default)
+                fragmentTransaction.add(R.id.fragment_container, fragmentContacts).commit();
+            }
 
             /* (Not sure about this method)
             // Check that the activity is using the layout version with
@@ -168,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     //Specifically checks for READ_CONTACTS permission
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                    if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
 
                         Toast.makeText(this, "Contacts permission granted!", Toast.LENGTH_SHORT).show();
 
@@ -182,15 +172,17 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     //Specifically checks for READ_CALL_LOG permission
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED){
+                    if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED){
 
                         Toast.makeText(this, "Call Log permission granted!", Toast.LENGTH_SHORT).show();
 
                         //Directs UI to appropriate screen
                         if (navScreen == 0) {
-                            fragmentTransaction.replace(R.id.fragment_container, callListFragment).addToBackStack(null).commit();
-                        } else { //navScreen == 1
-                            fragmentTransaction.replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
+                            fragmentTransaction.replace(R.id.fragment_container, fragmentContacts).addToBackStack(null).commit();
+                        } else if (navScreen == 1) {
+                            fragmentTransaction.replace(R.id.fragment_container, fragmentCallList).addToBackStack(null).commit();
+                        } else { //navScreen == 2
+                            fragmentTransaction.replace(R.id.fragment_container, fragmentHistory).addToBackStack(null).commit();
                         }
                     }
 
@@ -203,6 +195,5 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
     }
-
 
 }

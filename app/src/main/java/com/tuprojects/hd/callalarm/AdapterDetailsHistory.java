@@ -9,36 +9,29 @@ import android.widget.TextView;
 
 import java.util.List;
 
-//Interface between the (Contacts) data source and the AdapterView (ListView->RecyclerView) layout
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
+public class AdapterDetailsHistory extends RecyclerView.Adapter<AdapterDetailsHistory.ViewHolder> {
 
     //State
-    private List<ContactsFragment.AndroidContact> dataset;
+    private List<CallLogData> dataset;
 
     //Inner Class, ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //State
-        public TextView textView;
+        public TextView detailsTextView;
         public ConstraintLayout parentLayout;
 
         //Constructor
         public ViewHolder(View itemView) {
             super(itemView);
-            this.textView = itemView.findViewById(R.id.contacts_data_holder);
-            this.parentLayout = itemView.findViewById(R.id.contacts_layout);
+            this.detailsTextView = itemView.findViewById(R.id.details_history_holder);
+            this.parentLayout = itemView.findViewById(R.id.details_history_layout);
         }
 
-        /*
-        public ViewHolder(TextView textView) {
-            super(textView);
-            this.textView = textView;
-        }
-        */
     }
 
     //Constructor
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ContactsAdapter(List<ContactsFragment.AndroidContact> dataset) {
+    public AdapterDetailsHistory(List<CallLogData> dataset) {
         this.dataset = dataset;
     }
 
@@ -46,19 +39,24 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     //ViewHolder Behavior // Create new views (invoked by the layout manager) //NECESSARY
     @Override
-    public ContactsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterDetailsHistory.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_recyclerview_row, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.details_history_recyclerview_row, parent, false);
+        AdapterDetailsHistory.ViewHolder viewHolder = new AdapterDetailsHistory.ViewHolder(view);
         return viewHolder;
     }
 
     // Replace the contents of a view (invoked by the layout manager) //NECESSARY
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterDetailsHistory.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textView.setText(dataset.get(position).getName());
+        //String numName = dataset.get(position).getStrippedNumber()+"||"+dataset.get(position).getName();
+        //holder.nameTextView.setText(dataset.get(position).getName());
+
+        String details = dataset.get(position).getDate()+" ("+dataset.get(position).getDuration()+") - "+dataset.get(position).getType();
+        holder.detailsTextView.setText(details);
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
