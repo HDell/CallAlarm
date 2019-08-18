@@ -8,6 +8,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
+    <!-- Add a call button eventually -->
     <CheckBox
         android:id="@+id/details_contacts_toggle"
         android:layout_width="wrap_content"
@@ -16,6 +17,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <!-- Turn this into a heart icon eventually -->
 
     <EditText
         android:id="@+id/calls_per_period"
@@ -124,5 +126,7 @@
         app:layout_constraintLeft_toLeftOf="@id/text_calls_per_period"
         tools:layout_editor_absoluteX="163dp"
         tools:layout_editor_absoluteY="76dp" />
+    
+
 
 </android.support.constraint.ConstraintLayout>

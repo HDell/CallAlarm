@@ -20,6 +20,6 @@
 
     <string name="text_calls_per_period">0 Times</string>
     <string name="text_frequency">N/A</string>
-    <string name="text_next_call_date"> "Reminder: Not Scheduled"</string>
+    <string name="text_next_call_date"> "Reminder: Not Scheduled"</string> <!--Change to Next Call and fix formatting-->
 
 </resources>

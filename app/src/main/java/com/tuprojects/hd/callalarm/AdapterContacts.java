@@ -56,7 +56,7 @@ public class AdapterContacts extends RecyclerView.Adapter<AdapterContacts.ViewHo
     public AdapterContacts.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View view = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_recyclerview_row, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view); //Constructs ViewHolder w/ the View (above)
         return viewHolder;
     }
 

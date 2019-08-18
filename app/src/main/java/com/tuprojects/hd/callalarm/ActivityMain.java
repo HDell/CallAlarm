@@ -3,12 +3,12 @@ package com.tuprojects.hd.callalarm;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -39,6 +39,7 @@ public class ActivityMain extends AppCompatActivity {
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Views (Widgets)
+    //anonymous class
     BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {//listens for clicks
 
         @Override
@@ -103,22 +104,22 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CONTACTS)) {
-                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
+        if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) { //Check if Read Contacts permission has NOT been granted
+            if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CONTACTS)) { //Not sure why this is necessary or how this is checked
+                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1); //either way, request the permission
             } else {
-                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
+                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1); //either way, request the permission
             }
-        } else {
+        } else { //If permission has been granted, move on with the rest of the onCreate() implementation
             //Initializations
             //Views
-            //is casting to BottomNavigationView really redundant?
+                //is casting to BottomNavigationView really redundant?
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation); //syncs nav object w/ layout
 
             //View Behavior
-            navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+            navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener); //sets listener for the bottom nav
 
-            if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras() != null) { //Based on if ActivityMain is navigated to via another (Details) Activity
                 navScreen = getIntent().getExtras().getInt("navScreen");
                 if (navScreen == 0) {
                     navigation.setSelectedItemId(R.id.navigation_contacts);
@@ -153,14 +154,14 @@ public class ActivityMain extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case 1: { //curly braces used to visually separate the return statement below
+            case 1: { //only one case; curly braces used to visually separate the return statement below
                 //General permission check
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     //Specifically checks for READ_CONTACTS permission
                     if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
 
-                        Toast.makeText(this, "Contacts permission granted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Contacts permission granted!", Toast.LENGTH_SHORT).show(); //To Be Removed, replace w/ log
 
                         //Restarts Activity if permission has been granted for the first time
                         if(restart) {
@@ -174,7 +175,7 @@ public class ActivityMain extends AppCompatActivity {
                     //Specifically checks for READ_CALL_LOG permission
                     if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED){
 
-                        Toast.makeText(this, "Call Log permission granted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Call Log permission granted!", Toast.LENGTH_SHORT).show(); //To Be Removed, replace w/ log
 
                         //Directs UI to appropriate screen
                         if (navScreen == 0) {

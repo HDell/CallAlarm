@@ -84,7 +84,7 @@ public class AdapterCallList extends RecyclerView.Adapter<AdapterCallList.ViewHo
         try {
             history = dataset.get(position).getCallLogData().get(0).getDate() + ", " + dataset.get(position).getCallLogData().get(0).getDuration();
         } catch (IndexOutOfBoundsException e) {
-            history = "No call history available.";
+            history = "No call history available";
         }
 
         holder.nameTextView.setText(name);

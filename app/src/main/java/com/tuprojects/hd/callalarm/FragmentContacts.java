@@ -24,9 +24,6 @@ public class FragmentContacts extends Fragment {
 
         // 1. get a reference to recyclerView
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.contacts_recycler_view);
-        //private RecyclerView recyclerView;
-        //recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
 
         // 2. set layoutManger
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -45,11 +42,11 @@ public class FragmentContacts extends Fragment {
     }
 
     private List<AndroidContact> getAndroidContacts() {
-        List<AndroidContact> androidContactList = new ArrayList<AndroidContact>();
+        List<AndroidContact> androidContactList = new ArrayList<>();
 
         //Initialize Cursor w/ connection to Contacts (Content) Provider
         Cursor cursorAndroidContacts = null; //learn CursorLoader; confused on difference between Cursor & CursorLoader
-        ContentResolver contentResolver = getContext().getContentResolver();
+        ContentResolver contentResolver = getContext().getContentResolver(); //ContestResolver, used to comm w/ Content Provider as a client
         try {
 
             //content://contacts_contract/contacts -> ContactsContracts=authority, Contacts=table path, CONTENT_URI contains URI to contacts table
