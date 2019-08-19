@@ -61,7 +61,7 @@ public class ActivityMain extends AppCompatActivity {
                     navScreen = 1;
                     restart = false;
 
-                    if (selfPermissionCheck(Manifest.permission.READ_CALL_LOG)) { //Call List requires call log permission
+                    if (selfPermissionFalseCheck(Manifest.permission.READ_CALL_LOG)) { //Call List requires call log permission
                         ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1); //request permission
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
@@ -75,7 +75,7 @@ public class ActivityMain extends AppCompatActivity {
                     navScreen = 2;
                     restart = false;
 
-                    if (selfPermissionCheck(Manifest.permission.READ_CALL_LOG)) { //History requires call log permission
+                    if (selfPermissionFalseCheck(Manifest.permission.READ_CALL_LOG)) { //History requires call log permission
                         ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1); //request permission
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
@@ -92,10 +92,10 @@ public class ActivityMain extends AppCompatActivity {
     //BEHAVIOR
     @Override
     protected void onCreate(Bundle savedInstanceState) { //When Activity is created
-        //Default Methods
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (selfPermissionCheck(Manifest.permission.READ_CONTACTS)) { //Check if Read Contacts permission has NOT been granted
+
+        if (selfPermissionFalseCheck(Manifest.permission.READ_CONTACTS)) { //Check if Read Contacts permission has NOT been granted
             ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
         } else { //If permission has been granted, move on with the rest of the onCreate() implementation
             //Initializations
@@ -170,7 +170,7 @@ public class ActivityMain extends AppCompatActivity {
         }
     }
 
-    public boolean selfPermissionCheck(String manifest) {
+    public boolean selfPermissionFalseCheck(String manifest) {
         return (ContextCompat.checkSelfPermission(ActivityMain.this, manifest) != PackageManager.PERMISSION_GRANTED);
     }
 
