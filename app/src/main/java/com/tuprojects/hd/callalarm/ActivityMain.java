@@ -29,17 +29,17 @@ public class ActivityMain extends AppCompatActivity {
     //Solution to direct UI to Call List (0) or Navigation History (1)
     int navScreen;
 
-        //Fragments
+        //Fragments (classes I created)
     FragmentContacts fragmentContacts = new FragmentContacts();
     FragmentCallList fragmentCallList = new FragmentCallList();
     FragmentHistory fragmentHistory = new FragmentHistory();
 
-            //Manager Set Up
+            //Manager Set Up (imported)
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         //Views (Widgets)
-    //anonymous class
+    //anonymous class used to switch screens as user clicks navigation buttons
     BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {//listens for clicks
 
         @Override
@@ -61,12 +61,8 @@ public class ActivityMain extends AppCompatActivity {
                     navScreen = 1;
                     restart = false;
 
-                    if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CALL_LOG)) {
-                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
-                        } else {
-                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
-                        }
+                    if (selfPermissionCheck(Manifest.permission.READ_CALL_LOG)) { //Call List requires call log permission
+                        ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1); //request permission
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
                         // and add the transaction to the back stack
@@ -79,12 +75,8 @@ public class ActivityMain extends AppCompatActivity {
                     navScreen = 2;
                     restart = false;
 
-                    if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CALL_LOG)) {
-                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
-                        } else {
-                            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1);
-                        }
+                    if (selfPermissionCheck(Manifest.permission.READ_CALL_LOG)) { //History requires call log permission
+                        ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CALL_LOG}, 1); //request permission
                     } else {
                         // Replace whatever is in the fragment_container view with this fragment,
                         // and add the transaction to the back stack
@@ -99,28 +91,23 @@ public class ActivityMain extends AppCompatActivity {
 
     //BEHAVIOR
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //When Activity is created
         //Default Methods
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (ContextCompat.checkSelfPermission(ActivityMain.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) { //Check if Read Contacts permission has NOT been granted
-            if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, Manifest.permission.READ_CONTACTS)) { //Not sure why this is necessary or how this is checked
-                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1); //either way, request the permission
-            } else {
-                ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1); //either way, request the permission
-            }
+        if (selfPermissionCheck(Manifest.permission.READ_CONTACTS)) { //Check if Read Contacts permission has NOT been granted
+            ActivityCompat.requestPermissions(ActivityMain.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
         } else { //If permission has been granted, move on with the rest of the onCreate() implementation
             //Initializations
-            //Views
-                //is casting to BottomNavigationView really redundant?
-            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation); //syncs nav object w/ layout
+            //Views (base class for widgets) - see activity_main.xml
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation); //findViewById syncs nav object w/ layout
+                //findViewById doesn't necessarily return a BottomNavigationView object (which is why it must be type casted)
 
             //View Behavior
             navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener); //sets listener for the bottom nav
 
             if (getIntent().getExtras() != null) { //Based on if ActivityMain is navigated to via another (Details) Activity
-                navScreen = getIntent().getExtras().getInt("navScreen");
+                navScreen = getIntent().getExtras().getInt("navScreen"); //0, 1, or 2 determines which Fragment is selected on ActivityMain
                 if (navScreen == 0) {
                     navigation.setSelectedItemId(R.id.navigation_contacts);
                 } else if (navScreen == 1) {
@@ -133,20 +120,6 @@ public class ActivityMain extends AppCompatActivity {
                 fragmentTransaction.add(R.id.fragment_container, fragmentContacts).commit();
             }
 
-            /* (Not sure about this method)
-            // Check that the activity is using the layout version with
-            // the fragment_container FrameLayout
-            if (findViewById(R.id.fragment_container) != null) {
-
-                // However, if we're being restored from a previous state,
-                // then we don't need to do anything and should return or else
-                // we could end up with overlapping fragments.
-                if (savedInstanceState != null) {
-                    return;
-                }
-
-
-            }*/
         }
 
     }
@@ -195,6 +168,10 @@ public class ActivityMain extends AppCompatActivity {
             }
             return;
         }
+    }
+
+    public boolean selfPermissionCheck(String manifest) {
+        return (ContextCompat.checkSelfPermission(ActivityMain.this, manifest) != PackageManager.PERMISSION_GRANTED);
     }
 
 }
