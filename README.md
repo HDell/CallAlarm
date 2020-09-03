@@ -9,4 +9,4 @@ An android application that:
 Development of this app will be moved to React Native so that it can be deployed on both Android and IOS.
 
 ## Design
-The app is currently being redesigned in Figma (from Adobe XD).
+The app is currently being redesigned in Figma.
